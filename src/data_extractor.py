@@ -15,10 +15,12 @@ class DataExtractor:
     Second parametter is question number (1 to 5).
     Third parametter is feature name, you can put one of this options: gaze, pose, 2d_landmarks, 3d_landmarks, pdm, AU, eye_lmk.
     If you want all features, just put an empty string "".
+    Fourth parametter is labels type, you can put one of this options: depression, anxiety, both.
+    
 
     Example:
         extractor = DataExtractor()
-        dataframe = extractor.extract_csv(temporality=True, question=2, feature="gaze")
+        dataframe = extractor.extract_csv(temporality=True, question=2, feature="gaze", labels="depression")
     """
 
     route: Path
@@ -28,7 +30,7 @@ class DataExtractor:
         self.route = Path.cwd() / "data"
 
     def extract_csv(
-        self, temporality: bool, question: int, feature: str
+        self, temporality: bool, question: int, feature: str, labels: str
     ) -> pd.DataFrame:
         """
         Extract CSV file based on question number and feature name.
@@ -45,23 +47,33 @@ class DataExtractor:
         df_list = []
 
         for user in self.route.iterdir():
+            # Pass csv labels
+            if "labels.csv" in user.name:
+                continue
+
             # Update route with subfolder (frame2frame or stats)
-            user /= self.if_temporality(temporality)
+            user_path = user / self.if_temporality(temporality)
 
             # Update route with question folder
-            user /= self.validate_question(question)
+            user_path /= self.validate_question(question)
 
             # Add feature to route
-            user /= self.validate_feature(feature=feature, question=question)
+            user_path /= self.validate_feature(feature=feature, question=question)
 
             # Final route with feature csv
-            temp_df = self.upload_csv(user)
+            temp_df = self.upload_csv(user_path)
+
+            # Add user column
+            temp_df["ID"] = user.name 
 
             # Add df to list
             df_list.append(temp_df)
 
         # Concatenate all dataframes
         df = pd.concat(df_list, ignore_index=True)
+
+        # Add labels if needed
+        df = self.add_labels(df, labels)
         return df
 
     def if_temporality(self, temporality: bool) -> str:
@@ -156,3 +168,20 @@ class DataExtractor:
 
         # Perform upload operation (e.g., to a database or cloud storage)
         return df
+
+    def add_labels(self, df: pd.DataFrame, labels: str) -> pd.DataFrame:
+        # Add labels to the dataframe based on the specified label type.
+        match labels:
+            case "depression":
+                labels = pd.read_csv(self.route / "labels.csv", usecols=["ID", "S_Depresión"])
+            case "anxiety":
+                labels = pd.read_csv(self.route / "labels.csv", usecols=["ID", "S_Ansiedad"])
+            case "both":
+                labels = pd.read_csv(self.route / "labels.csv", usecols=["ID", "S_Depresión", "S_Ansiedad"])
+            case _:
+                raise ValueError(
+                    "Invalid labels name. Must be one of: depression, anxiety, both."
+                )
+        
+        df_labels = pd.merge(df, labels, on="ID")
+        return df_labels
