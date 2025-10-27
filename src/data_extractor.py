@@ -58,7 +58,7 @@ class DataExtractor:
             user_path /= self.validate_question(question)
 
             # Add feature to route
-            user_path /= self.validate_feature(feature=feature, question=question)
+            user_path /= self.validate_feature(feature=feature, question=question, temporality=temporality)
 
             # Final route with feature csv
             temp_df = self.upload_csv(user_path)
@@ -113,7 +113,7 @@ class DataExtractor:
             case _:
                 raise ValueError("Invalid question number. Must be between 1 and 5.")
 
-    def validate_feature(self, feature: str, question: int) -> str:
+    def validate_feature(self, feature: str, question: int, temporality: bool) -> str:
         """
         Validate if the feature name is within the valid options.
 
@@ -137,22 +137,30 @@ class DataExtractor:
         if not feature:
             return feature_route + ".csv"
 
-        # Validate feature name
-        match feature:
-            case (
-                "gaze"
-                | "2d_landmarks"
-                | "3d_landmarks"
-                | "AU"
-                | "eye_lmk"
-                | "pdm"
-                | "pose"
-            ):
-                return feature_route + "_" + feature + ".csv"
-            case _:
-                raise ValueError(
-                    "Invalid feature name. Must be one of: gaze, pose, 2d landmarks, 3d landmarks, pdm, AU, eye_lmk."
-                )
+        temporal_suffixes = {
+                "gaze": "_gaze.csv",
+                "pose": "_pose.csv",
+                "2d_landmarks": "_2d_landmark.csv",
+                "3d_landmarks": "_3d_landmark.csv",
+                "pdm": "_pdm.csv",
+                "AU": "_AU.csv",
+                "eye_lmk": "_eye_lmk.csv",
+        }
+
+        stats_suffixes = {
+                "gaze": "_gaze_features.csv",
+                "pose": "_pose_features.csv",
+                "AU_c": "_AU_c_features.csv",
+                "AU_r": "_AU_r_features.csv",
+        }
+
+        suffix_map = temporal_suffixes if temporality else stats_suffixes
+        try:
+            suffix = suffix_map[feature]
+        except KeyError:
+            raise ValueError("...")
+        
+        return feature_route + suffix
 
     def upload_csv(self, user_route: Path) -> pd.DataFrame:
         """
