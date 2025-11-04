@@ -50,26 +50,29 @@ def return_mode(
     return X, y
 
 
-def main():
-    # Extract csv data for temporality, question and feature
-    extractor = DataExtractor()
+def extract_data() -> tuple[pd.DataFrame, str | list]:
+    extract = DataExtractor()
 
     question = select_question()
     temporality = select_temporality()
     feature = select_feature(temporary=temporality)
     label = select_label()
 
-    dataframe, labels_name = extractor.extract_csv(
+    return extract.extract_csv(
         temporality=temporality, question=question, feature=feature, labels=label
     )
 
-    # Create train and test
-    X, y = split_data(dataframe=dataframe, label=labels_name)
-    X, X_id = get_ID(X)
 
-    # Mode (Feature Selection, Dimensionality Reduction, Over Sampling)
+def extract_dataframes_and_series(dataframe: pd.DataFrame, label_names: str | list) -> tuple[pd.DataFrame, pd.Series, pd.Series]:
+    X, y = split_data(dataframe=dataframe, label=label_names)
+    X, X_id = get_ID(X)
+    return X, X_id, y
+
+
+def config_data(X: pd.DataFrame, y: pd.Series) -> tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
     mode = select_mode()
 
+    # Mode (Feature Selection, Dimensionality Reduction, Over Sampling)
     if mode != "SMOTE" and mode is not None:
         X, y = return_mode(mode, X, y)
 
@@ -81,6 +84,10 @@ def main():
     if mode == "SMOTE":
         X_train, y_train = return_mode(mode, X_train, y_train)
 
+    return X_train, X_test, y_train, y_test
+
+
+def execute_model(X_train: pd.DataFrame, X_test: pd.DataFrame, y_train: pd.Series, y_test: pd.Series) -> dict:
     # Create model
     model = Models()
     model_selected = select_model()
@@ -98,9 +105,32 @@ def main():
     # F1 SCORE
     f1_score_result = model.f1_scores_macro(y_predict, y_test)
 
+    return f1_score_result
+
+
+def sorted_dict(f1_scores: dict) -> dict:
+    balance = {k: v for k, v in sorted(f1_scores.items(), key=lambda item: item[1], reverse=True)}
+    return balance
+
+def main():
+    # Extract csv data for temporality, question and feature
+    dataframe, label_names = extract_data()
+    
+    # Split X, X_id and y
+    X, X_id, y = extract_dataframes_and_series(dataframe=dataframe, label_names=label_names)
+    
+    # Split train data and test data
+    X_train, X_test, y_train, y_test = config_data(X=X, y=y)
+
+    # Execute model
+    f1_score_results = execute_model(X_train=X_train, X_test=X_test, y_train=y_train, y_test=y_test)
+    
+    # Sort dictionary
+    f1_score_results = sorted_dict(f1_scores=f1_score_results)
+
     # Check the F1 SCORE for each model
-    for f1_score in f1_score_result:
-        print(f"F1_SCORE of {f1_score} model: {f1_score_result[f1_score]}\n")
+    for f1_score in f1_score_results:
+        print(f"F1_SCORE of {f1_score} model: {f1_score_results[f1_score]}\n")
 
 
 if __name__ == "__main__":
