@@ -4,7 +4,7 @@ from .structure import Structure
 
 class FeatureSelection(Structure):
 
-    def select_k_best(
+    def apply(
         self, X: pd.DataFrame, y: pd.Series, n_features: int = 10
     ) -> pd.DataFrame:
         # Feature Selection

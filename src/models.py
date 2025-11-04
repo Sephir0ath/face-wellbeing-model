@@ -134,12 +134,15 @@ class Models:
         return tuning
 
     def fit_and_predict_single_model(
-        self, X_train: pd.DataFrame, y_train: pd.Series, model
+        self, X_train: pd.DataFrame, y_train: pd.Series, X_test: pd.DataFrame, model
     ) -> dict:
+        y_predict = {}
+
         name = model.__name__
-        tuning = Models.parameter_tuning(str(name))
+        tuning = self.parameter_tuning(name)
 
         model_instance = model(**tuning)
         model_instance.fit(X_train, y_train)
-        y_predict = model_instance.predict(X_train)
+        y_predict[name] = model_instance.predict(X_test)
+
         return y_predict

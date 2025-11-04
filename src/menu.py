@@ -1,10 +1,15 @@
 from questionary import select
-from sklearn.exceptions import ConvergenceWarning
-import warnings
 
-# Hide warnings
-warnings.filterwarnings("ignore", category=UserWarning)
-warnings.filterwarnings("ignore", category=ConvergenceWarning)
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import (
+    RandomForestClassifier,
+    HistGradientBoostingClassifier,
+    GradientBoostingClassifier,
+)
+from sklearn.svm import SVC, LinearSVC
+from sklearn.naive_bayes import GaussianNB
 
 
 def select_question() -> int:
@@ -48,8 +53,69 @@ def select_feature(temporary: bool) -> str:
 
 
 def select_label() -> str:
-    questions = ["depression", "anxiety", "both"]
+    questions = ["depression", "anxiety", "both (ignore this)"]
 
     response = select("Temporary data:", choices=questions).ask()
 
+    response = "both" if response == "both (ignore this)" else response
+
     return response
+
+
+def select_model():
+    models = [
+        "all",
+        "LogisticRegression",
+        "KNeighborsClassifier",
+        "DecisionTreeClassifier",
+        "RandomForestClassifier",
+        "SVC",
+        "LinearSVC",
+        "GaussianNB",
+        "GradientBoostingClassifier",
+        "HistGradientBoostingClassifier",
+    ]
+
+    models_dict = {
+        "all": "",
+        "LogisticRegression": LogisticRegression,
+        "KNeighborsClassifier": KNeighborsClassifier,
+        "DecisionTreeClassifier": DecisionTreeClassifier,
+        "RandomForestClassifier": RandomForestClassifier,
+        "SVC": SVC,
+        "LinearSVC": LinearSVC,
+        "GaussianNB": GaussianNB,
+        "GradientBoostingClassifier": GradientBoostingClassifier,
+        "HistGradientBoostingClassifier": HistGradientBoostingClassifier,
+    }
+
+    response = select("Temporary data:", choices=models).ask()
+    response = models_dict[response]
+
+    return response
+
+
+def select_mode() -> str | None:
+    questions = [
+        "Selection Feature (Select K Best)",
+        "PCA (Principal Component Analysis)",
+        "t-SNE (T-distributed Stochastic Neighbor Embedding)",
+        "SMOTE (Synthetic Minority Over Sampling Technique)",
+        "Pass",
+    ]
+
+    response = select("Temporary data:", choices=questions).ask()
+
+    match response:
+        case "Selection Feature (Select K Best)":
+            return "selection feature"
+        case "PCA (Principal Component Analysis)":
+            return "PCA"
+        case "t-SNE (T-distributed Stochastic Neighbor Embedding)":
+            return "t-SNE"
+        case "SMOTE (Synthetic Minority Over Sampling Technique)":
+            return "SMOTE"
+        case "Pass":
+            return None
+        case _:
+            ValueError("It is not a valid mode")

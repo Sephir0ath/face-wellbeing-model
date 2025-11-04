@@ -4,7 +4,9 @@ from .structure import Structure
 
 class Smote(Structure):
 
-    def apply_smote(self, X_train: pd.DataFrame, y_train: pd.Series) -> tuple:
+    def apply(
+        self, X_train: pd.DataFrame, y_train: pd.Series
+    ) -> tuple[pd.DataFrame, pd.Series]:
         from imblearn.over_sampling import SMOTE
 
         smote = SMOTE(random_state=42)
