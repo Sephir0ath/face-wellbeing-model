@@ -1,10 +1,11 @@
 import pandas as pd
 
-class Structure: 
+
+class Structure:
     def __init__(self):
         pass
 
-    def standard_scaler(X_train: pd.DataFrame, X_test: pd.DataFrame) -> tuple:
+    def standard_scaler(self, X_train: pd.DataFrame, X_test: pd.DataFrame) -> tuple:
         # Feature Scaling
         from sklearn.preprocessing import StandardScaler
 

@@ -4,3 +4,4 @@
  seaborn>=0.13.2
  pandas>=2.3.0
  imblearn>=0.0
+ questionary>=2.1.1

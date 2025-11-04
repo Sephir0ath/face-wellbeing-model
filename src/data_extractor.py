@@ -16,7 +16,7 @@ class DataExtractor:
     Third parametter is feature name, you can put one of this options: gaze, pose, 2d_landmarks, 3d_landmarks, pdm, AU, eye_lmk.
     If you want all features, just put an empty string "".
     Fourth parametter is labels type, you can put one of this options: depression, anxiety, both.
-    
+
 
     Example:
         extractor = DataExtractor()
@@ -31,7 +31,7 @@ class DataExtractor:
 
     def extract_csv(
         self, temporality: bool, question: int, feature: str, labels: str
-    ) -> pd.DataFrame:
+    ) -> tuple[pd.DataFrame, str | list]:
         """
         Extract CSV file based on question number and feature name.
 
@@ -58,13 +58,15 @@ class DataExtractor:
             user_path /= self.validate_question(question)
 
             # Add feature to route
-            user_path /= self.validate_feature(feature=feature, question=question, temporality=temporality)
+            user_path /= self.validate_feature(
+                feature=feature, question=question, temporality=temporality
+            )
 
             # Final route with feature csv
             temp_df = self.upload_csv(user_path)
 
             # Add user column
-            temp_df["ID"] = user.name 
+            temp_df["ID"] = user.name
 
             # Add df to list
             df_list.append(temp_df)
@@ -73,8 +75,8 @@ class DataExtractor:
         df = pd.concat(df_list, ignore_index=True)
 
         # Add labels if needed
-        df = self.add_labels(df, labels)
-        return df
+        df, labels_name = self.add_labels(df, labels)
+        return df, labels_name
 
     def if_temporality(self, temporality: bool) -> str:
         """
@@ -138,20 +140,20 @@ class DataExtractor:
             return feature_route + ".csv"
 
         temporal_suffixes = {
-                "gaze": "_gaze.csv",
-                "pose": "_pose.csv",
-                "2d_landmarks": "_2d_landmark.csv",
-                "3d_landmarks": "_3d_landmark.csv",
-                "pdm": "_pdm.csv",
-                "AU": "_AU.csv",
-                "eye_lmk": "_eye_lmk.csv",
+            "gaze": "_gaze.csv",
+            "pose": "_pose.csv",
+            "2d_landmarks": "_2d_landmark.csv",
+            "3d_landmarks": "_3d_landmark.csv",
+            "pdm": "_pdm.csv",
+            "AU": "_AU.csv",
+            "eye_lmk": "_eye_lmk.csv",
         }
 
         stats_suffixes = {
-                "gaze": "_gaze_features.csv",
-                "pose": "_pose_features.csv",
-                "AU_c": "_AU_c_features.csv",
-                "AU_r": "_AU_r_features.csv",
+            "gaze": "_gaze_features.csv",
+            "pose": "_pose_features.csv",
+            "AU_c": "_AU_c_features.csv",
+            "AU_r": "_AU_r_features.csv",
         }
 
         suffix_map = temporal_suffixes if temporality else stats_suffixes
@@ -159,7 +161,7 @@ class DataExtractor:
             suffix = suffix_map[feature]
         except KeyError:
             raise ValueError("...")
-        
+
         return feature_route + suffix
 
     def upload_csv(self, user_route: Path) -> pd.DataFrame:
@@ -177,19 +179,36 @@ class DataExtractor:
         # Perform upload operation (e.g., to a database or cloud storage)
         return df
 
-    def add_labels(self, df: pd.DataFrame, labels: str) -> pd.DataFrame:
+    def add_labels(
+        self, df: pd.DataFrame, labels: str
+    ) -> tuple[pd.DataFrame, str | list]:
         # Add labels to the dataframe based on the specified label type.
+        labels_name = []
         match labels:
             case "depression":
-                labels = pd.read_csv(self.route / "labels.csv", usecols=["ID", "S_Depresión"])
+                labels = pd.read_csv(
+                    self.route / "labels.csv", usecols=["ID", "S_Depresión"]
+                )
+                labels["S_Depresión"] = labels["S_Depresión"].astype(int)
+                labels_name = "S_Depresión"
             case "anxiety":
-                labels = pd.read_csv(self.route / "labels.csv", usecols=["ID", "S_Ansiedad"])
+                labels = pd.read_csv(
+                    self.route / "labels.csv", usecols=["ID", "S_Ansiedad"]
+                )
+                labels["S_Ansiedad"] = labels["S_Ansiedad"].astype(int)
+                labels_name = "S_Ansiedad"
             case "both":
-                labels = pd.read_csv(self.route / "labels.csv", usecols=["ID", "S_Depresión", "S_Ansiedad"])
+                labels = pd.read_csv(
+                    self.route / "labels.csv",
+                    usecols=["ID", "S_Depresión", "S_Ansiedad"],
+                )
+                labels["S_Depresión"] = labels["S_Depresión"].astype(int)
+                labels["S_Ansiedad"] = labels["S_Ansiedad"].astype(int)
+                labels_name = ["S_Depresión", "S_Ansiedad"]
             case _:
                 raise ValueError(
                     "Invalid labels name. Must be one of: depression, anxiety, both."
                 )
-        
+
         df_labels = pd.merge(df, labels, on="ID")
-        return df_labels
+        return df_labels, labels_name

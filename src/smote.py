@@ -1,9 +1,10 @@
 import pandas as pd
-from structure import Structure
+from .structure import Structure
 
-class Smote(Structure): 
 
-    def apply_smote(X_train: pd.DataFrame, y_train: pd.Series) -> tuple:
+class Smote(Structure):
+
+    def apply_smote(self, X_train: pd.DataFrame, y_train: pd.Series) -> tuple:
         from imblearn.over_sampling import SMOTE
 
         smote = SMOTE(random_state=42)
