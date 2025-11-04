@@ -5,7 +5,7 @@ def main():
     # Extract csv data for temporality, question and feature
     extractor = DataExtractor()
     dataframe = extractor.extract_csv(
-        temporality=True, question=2, feature="gaze", labels="depression"
+        temporality=False, question=2, feature="gaze", labels="depression"
     )
 
     print(dataframe.head())
