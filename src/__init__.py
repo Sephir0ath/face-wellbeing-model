@@ -3,3 +3,4 @@ from .models import Models
 from .smote import Smote
 from .dimensionality_reduction import DimensionalityReduction
 from .feature_selection import FeatureSelection
+from .structure import Structure

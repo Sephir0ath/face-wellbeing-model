@@ -26,7 +26,7 @@ class Models:
     def __init__(self):
         pass
 
-    def fit_and_predict(X_train: pd.DataFrame, y_train: pd.Series, models: list = MODELS) -> dict: 
+    def fit_and_predict_models(X_train: pd.DataFrame, y_train: pd.Series, models: list = MODELS) -> dict: 
         predict = {}
 
         for model in models:
@@ -85,7 +85,14 @@ class Models:
 
         return tuning
 
+    def fit_and_predict_single_model(X_train: pd.DataFrame, y_train: pd.Series, model) -> dict:
+        name = model.__name__
+        tuning = Models.parameter_tuning(str(name))
 
+        model_instance = model(**tuning)
+        model_instance.fit(X_train, y_train)
+        y_predict = model_instance.predict(X_train)
+        return y_predict
     
 
 

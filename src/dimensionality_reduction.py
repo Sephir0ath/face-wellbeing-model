@@ -1,18 +1,7 @@
 import pandas as pd
+from structure import Structure
 
-class DimensionalityReduction:
-    def __init__(self):
-        pass
-
-    def standard_scaler(X_train: pd.DataFrame, X_test: pd.DataFrame) -> tuple:
-        # Feature Scaling
-        from sklearn.preprocessing import StandardScaler
-        
-        scaler = StandardScaler()
-        X_train_scaled = scaler.fit_transform(X_train)
-        X_test_scaled = scaler.transform(X_test)
-
-        return X_train_scaled, X_test_scaled
+class DimensionalityReduction(Structure):
     
     def apply_pca(X: pd.DataFrame, n_components: float | int) -> pd.DataFrame:
         # Dimensionality Reduction
