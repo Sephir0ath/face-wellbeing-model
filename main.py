@@ -65,13 +65,17 @@ def extract_data() -> tuple[pd.DataFrame, str | list]:
     )
 
 
-def extract_dataframes_and_series(dataframe: pd.DataFrame, label_names: str | list) -> tuple[pd.DataFrame, pd.Series, pd.Series]:
+def extract_dataframes_and_series(
+    dataframe: pd.DataFrame, label_names: str | list
+) -> tuple[pd.DataFrame, pd.Series, pd.Series]:
     X, y = split_data(dataframe=dataframe, label=label_names)
     X, X_id = get_ID(X)
     return X, X_id, y
 
 
-def config_data(X: pd.DataFrame, y: pd.Series) -> tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
+def config_data(
+    X: pd.DataFrame, y: pd.Series
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
     mode = select_mode()
 
     # Mode (Feature Selection, Dimensionality Reduction, Over Sampling)
@@ -89,7 +93,9 @@ def config_data(X: pd.DataFrame, y: pd.Series) -> tuple[pd.DataFrame, pd.DataFra
     return X_train, X_test, y_train, y_test
 
 
-def execute_model(X_train: pd.DataFrame, X_test: pd.DataFrame, y_train: pd.Series, y_test: pd.Series) -> tuple[pd.Series, dict]:
+def execute_model(
+    X_train: pd.DataFrame, X_test: pd.DataFrame, y_train: pd.Series, y_test: pd.Series
+) -> tuple[pd.Series, dict]:
     # Create model
     model = Models()
     model_selected = select_model()
@@ -111,44 +117,58 @@ def execute_model(X_train: pd.DataFrame, X_test: pd.DataFrame, y_train: pd.Serie
 
 
 def sorted_dict(f1_scores: dict) -> dict:
-    balance = {k: v for k, v in sorted(f1_scores.items(), key=lambda item: item[1], reverse=True)}
+    balance = {
+        k: v
+        for k, v in sorted(f1_scores.items(), key=lambda item: item[1], reverse=True)
+    }
     return balance
 
 
 def testing_models():
     # Extract csv data for temporality, question and feature
     dataframe, label_names = extract_data()
-    
+
     # Split X, X_id and y
-    X, X_id, y = extract_dataframes_and_series(dataframe=dataframe, label_names=label_names)
-    
+    X, X_id, y = extract_dataframes_and_series(
+        dataframe=dataframe, label_names=label_names
+    )
+
     # Split train data and test data
     X_train, X_test, y_train, y_test = config_data(X=X, y=y)
 
     # Execute model
-    y_predict, f1_score_results = execute_model(X_train=X_train, X_test=X_test, y_train=y_train, y_test=y_test)
-    
+    y_predict, f1_score_results = execute_model(
+        X_train=X_train, X_test=X_test, y_train=y_train, y_test=y_test
+    )
+
     # Sort dictionary
     f1_score_results = sorted_dict(f1_scores=f1_score_results)
 
     # Check the F1 SCORE for each model
     for f1_score in f1_score_results:
         print(f"F1_SCORE of {f1_score} model: {f1_score_results[f1_score]}\n")
-    
+
     input("Press [ENTER] to view the confusion matrix... ")
-    
+
     for model in y_predict:
-        view_confusion_matrix(y_pred=y_predict[model], y_test=y_test, label=label_names)
+        view_confusion_matrix(
+            y_pred=y_predict[model], y_test=y_test, label=label_names, model_name=model
+        )
 
 
 def main():
     testing_models()
-    
+
     while True:
-        response = questionary.select("Do you want to continue testing models?", choices=["Yes", "No"])
-        
-        if response == "Yes": testing_models()
-        else: break
+
+        response = input(
+            "Do you want to continue testing models? [Y]es | [N]o: "
+        ).lower()
+
+        if response == "yes" or response == "y":
+            testing_models()
+        else:
+            break
 
 
 if __name__ == "__main__":

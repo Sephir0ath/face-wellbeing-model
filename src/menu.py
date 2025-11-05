@@ -45,7 +45,7 @@ def select_feature(temporary: bool) -> str:
     else:
         questions = ["gaze", "pose", "AU_c", "AU_r", "All features"]
 
-    response = select("Temporary data:", choices=questions).ask()
+    response = select("Select feature:", choices=questions).ask()
 
     response = "" if response == "All features" else response
 
@@ -55,7 +55,7 @@ def select_feature(temporary: bool) -> str:
 def select_label() -> str:
     questions = ["depression", "anxiety", "both (ignore this)"]
 
-    response = select("Temporary data:", choices=questions).ask()
+    response = select("Select label:", choices=questions).ask()
 
     response = "both" if response == "both (ignore this)" else response
 
@@ -89,7 +89,7 @@ def select_model():
         "HistGradientBoostingClassifier": HistGradientBoostingClassifier,
     }
 
-    response = select("Temporary data:", choices=models).ask()
+    response = select("Select model:", choices=models).ask()
     response = models_dict[response]
 
     return response
@@ -104,7 +104,7 @@ def select_mode() -> str | None:
         "Pass",
     ]
 
-    response = select("Temporary data:", choices=questions).ask()
+    response = select("Select mode:", choices=questions).ask()
 
     match response:
         case "Selection Feature (Select K Best)":
