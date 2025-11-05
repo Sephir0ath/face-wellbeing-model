@@ -5,12 +5,14 @@ from src.smote import *
 from src.dimensionality_reduction import *
 from src.structure import *
 from src.menu import *
+from src.graph import *
 
 from sklearn.model_selection import train_test_split
 from sklearn.exceptions import ConvergenceWarning
 
 import pandas as pd
 import warnings
+import questionary
 
 # Hide warnings
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -87,7 +89,7 @@ def config_data(X: pd.DataFrame, y: pd.Series) -> tuple[pd.DataFrame, pd.DataFra
     return X_train, X_test, y_train, y_test
 
 
-def execute_model(X_train: pd.DataFrame, X_test: pd.DataFrame, y_train: pd.Series, y_test: pd.Series) -> dict:
+def execute_model(X_train: pd.DataFrame, X_test: pd.DataFrame, y_train: pd.Series, y_test: pd.Series) -> tuple[pd.Series, dict]:
     # Create model
     model = Models()
     model_selected = select_model()
@@ -105,14 +107,15 @@ def execute_model(X_train: pd.DataFrame, X_test: pd.DataFrame, y_train: pd.Serie
     # F1 SCORE
     f1_score_result = model.f1_scores_macro(y_predict, y_test)
 
-    return f1_score_result
+    return y_predict, f1_score_result
 
 
 def sorted_dict(f1_scores: dict) -> dict:
     balance = {k: v for k, v in sorted(f1_scores.items(), key=lambda item: item[1], reverse=True)}
     return balance
 
-def main():
+
+def testing_models():
     # Extract csv data for temporality, question and feature
     dataframe, label_names = extract_data()
     
@@ -123,7 +126,7 @@ def main():
     X_train, X_test, y_train, y_test = config_data(X=X, y=y)
 
     # Execute model
-    f1_score_results = execute_model(X_train=X_train, X_test=X_test, y_train=y_train, y_test=y_test)
+    y_predict, f1_score_results = execute_model(X_train=X_train, X_test=X_test, y_train=y_train, y_test=y_test)
     
     # Sort dictionary
     f1_score_results = sorted_dict(f1_scores=f1_score_results)
@@ -131,6 +134,21 @@ def main():
     # Check the F1 SCORE for each model
     for f1_score in f1_score_results:
         print(f"F1_SCORE of {f1_score} model: {f1_score_results[f1_score]}\n")
+    
+    input("Press [ENTER] to view the confusion matrix... ")
+    
+    for model in y_predict:
+        view_confusion_matrix(y_pred=y_predict[model], y_test=y_test, label=label_names)
+
+
+def main():
+    testing_models()
+    
+    while True:
+        response = questionary.select("Do you want to continue testing models?", choices=["Yes", "No"])
+        
+        if response == "Yes": testing_models()
+        else: break
 
 
 if __name__ == "__main__":
