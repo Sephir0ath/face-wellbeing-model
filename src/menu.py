@@ -53,11 +53,14 @@ def select_feature(temporary: bool) -> str:
 
 
 def select_label() -> str:
-    questions = ["depression", "anxiety", "both (ignore this)"]
+    # Ignore both, both is a DataFrame, isn't Series.
+
+    # questions = ["depression", "anxiety", "both (ignore this)"]
+    questions = ["depression", "anxiety"]
 
     response = select("Select label:", choices=questions).ask()
 
-    response = "both" if response == "both (ignore this)" else response
+    # response = "both" if response == "both (ignore this)" else response
 
     return response
 
