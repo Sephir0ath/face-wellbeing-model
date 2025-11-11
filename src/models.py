@@ -28,8 +28,8 @@ MODELS = [
 
 
 class Models:
-    def __init__(self):
-        pass
+    def __init__(self, arguments: bool = None):
+        self.arguments = arguments
 
     def fit_and_predict_models(
         self,
@@ -38,7 +38,8 @@ class Models:
         X_test: pd.DataFrame,
         models: list = MODELS,
     ) -> dict:
-        print("Model training and predictions... \n\n")
+        
+        if not self.arguments: print("Model training and predictions... \n\n")
         predict = {}
 
         for model in models:

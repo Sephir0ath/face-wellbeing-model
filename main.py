@@ -12,7 +12,7 @@ from sklearn.exceptions import ConvergenceWarning
 
 import pandas as pd
 import warnings
-import questionary
+import argparse
 
 # Hide warnings
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -65,6 +65,17 @@ def extract_data() -> tuple[pd.DataFrame, str | list]:
     )
 
 
+def extract_data_with_arguments(
+        question: int, temporality: bool, feature: str, label: str 
+    ) -> tuple[pd.DataFrame, str | list]:
+    
+    extract = DataExtractor()
+
+    return extract.extract_csv(
+        temporality=temporality, question=question, feature=feature, labels=label
+    )
+
+
 def extract_dataframes_and_series(
     dataframe: pd.DataFrame, label_names: str | list
 ) -> tuple[pd.DataFrame, pd.Series, pd.Series]:
@@ -93,12 +104,54 @@ def config_data(
     return X_train, X_test, y_train, y_test
 
 
+def config_data_with_arguments(
+    X: pd.DataFrame, y: pd.Series, mode
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
+
+    # Mode (Feature Selection, Dimensionality Reduction, Over Sampling)
+    if mode != "SMOTE" and mode is not None:
+        X, y = return_mode(mode, X, y)
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.3, random_state=42
+    )
+
+    # Over Sampling
+    if mode == "SMOTE":
+        X_train, y_train = return_mode(mode, X_train, y_train)
+
+    return X_train, X_test, y_train, y_test
+
+
 def execute_model(
     X_train: pd.DataFrame, X_test: pd.DataFrame, y_train: pd.Series, y_test: pd.Series
 ) -> tuple[pd.Series, dict]:
     # Create model
     model = Models()
     model_selected = select_model()
+
+    # MultiModel or Single Model
+    if not model_selected:
+        y_predict = model.fit_and_predict_models(
+            X_train=X_train, y_train=y_train, X_test=X_test
+        )
+    else:
+        y_predict = model.fit_and_predict_single_model(
+            X_train=X_train, y_train=y_train, X_test=X_test, model=model_selected
+        )
+
+    # F1 SCORE
+    f1_score_result = model.f1_scores_macro(y_predict, y_test)
+
+    return y_predict, f1_score_result
+
+
+def execute_model_with_arguments(
+    X_train: pd.DataFrame, X_test: pd.DataFrame, y_train: pd.Series, y_test: pd.Series
+) -> tuple[pd.Series, dict]:
+    # Create model
+    model = Models(arguments=True)
+    model_selected = ""
 
     # MultiModel or Single Model
     if not model_selected:
@@ -156,19 +209,73 @@ def testing_models():
         )
 
 
+def testing_models_with_arguments(args):
+    
+    feature = "" if args.feature == "All features" else args.feature
+    temporality = True if args.temporality == "True" else False
+    question = int(args.question)
+    label = args.label
+    mode = args.mode
+
+    # Extract csv data for temporality, question and feature
+    dataframe, label_names = extract_data_with_arguments(feature=feature, temporality=temporality, question=question, label=label)
+
+    # Split X, X_id and y
+    X, X_id, y = extract_dataframes_and_series(
+        dataframe=dataframe, label_names=label_names
+    )
+
+    # Split train data and test data
+    X_train, X_test, y_train, y_test = config_data_with_arguments(X=X, y=y, mode=mode)
+
+    # Execute model
+    y_predict, f1_score_results = execute_model_with_arguments(
+        X_train=X_train, X_test=X_test, y_train=y_train, y_test=y_test
+    )
+
+    # Sort dictionary
+    f1_score_results = sorted_dict(f1_scores=f1_score_results)
+
+    # Check the F1 SCORE for each model
+    for f1_score in f1_score_results:
+        print(f"F1_SCORE of {f1_score} model: {f1_score_results[f1_score]}")
+
+
 def main():
-    testing_models()
 
-    while True:
+    parser = argparse.ArgumentParser()
 
-        response = input(
-            "Do you want to continue testing models? [Y]es | [N]o: "
-        ).lower()
+    # Parser for questions 
+    parser.add_argument("--question", type=int, help="Number of question. Example: 1, 2, 3, 4 or 5")
+    # Parser for features
+    parser.add_argument("--feature", type=str, help="Feature")
+    # Parser for label
+    parser.add_argument("--label", type=str, help="Name of labels")
+    # Parser for temporality
+    parser.add_argument("--temporality", type=str, help="Data with temporality or not")
+    # Parser for models
+    parser.add_argument("--model", type=str, help="Models")
+    # Parser for mode
+    parser.add_argument("--mode", type=str, help="hi")
 
-        if response == "yes" or response == "y":
-            testing_models()
-        else:
-            break
+    # Read to arguments
+    args = parser.parse_args()
+
+    if any(vars(args).values()):
+        testing_models_with_arguments(args)
+    else:
+        testing_models()
+
+        while True:
+
+            response = input(
+                "Do you want to continue testing models? [Y]es | [N]o: "
+            ).lower()
+
+            if response == "yes" or response == "y":
+                testing_models()
+            else:
+                break
 
 
 if __name__ == "__main__":
