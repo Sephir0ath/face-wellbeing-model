@@ -148,25 +148,32 @@ def execute_model(
 
 def execute_model_with_arguments(
     X_train: pd.DataFrame, X_test: pd.DataFrame, y_train: pd.Series, y_test: pd.Series
-) -> tuple[pd.Series, dict]:
+) -> tuple[pd.Series, dict, dict]:
     # Create model
     model = Models(arguments=True)
     model_selected = ""
 
     # MultiModel or Single Model
     if not model_selected:
-        y_predict = model.fit_and_predict_models(
+        y_predict_train = model.fit_and_predict_models(
+            X_train=X_train, y_train=y_train, X_test=X_train
+        )
+        y_predict_test = model.fit_and_predict_models(
             X_train=X_train, y_train=y_train, X_test=X_test
         )
     else:
-        y_predict = model.fit_and_predict_single_model(
+        y_predict_train = model.fit_and_predict_single_model(
+            X_train=X_train, y_train=y_train, X_test=X_train, model=model_selected
+        )
+        y_predict_test = model.fit_and_predict_single_model(
             X_train=X_train, y_train=y_train, X_test=X_test, model=model_selected
         )
 
     # F1 SCORE
-    f1_score_result = model.f1_scores_macro(y_predict, y_test)
+    f1_score_train = model.f1_scores_macro(y_predict_train, y_train)
+    f1_score_test = model.f1_scores_macro(y_predict_test, y_test)
 
-    return y_predict, f1_score_result
+    return y_predict_test, f1_score_train, f1_score_test
 
 
 def sorted_dict(f1_scores: dict) -> dict:
@@ -229,16 +236,14 @@ def testing_models_with_arguments(args):
     X_train, X_test, y_train, y_test = config_data_with_arguments(X=X, y=y, mode=mode)
 
     # Execute model
-    y_predict, f1_score_results = execute_model_with_arguments(
+    y_predict, f1_score_train, f1_score_test = execute_model_with_arguments(
         X_train=X_train, X_test=X_test, y_train=y_train, y_test=y_test
     )
 
-    # Sort dictionary
-    f1_score_results = sorted_dict(f1_scores=f1_score_results)
-
     # Check the F1 SCORE for each model
-    for f1_score in f1_score_results:
-        print(f"F1_SCORE of {f1_score} model: {f1_score_results[f1_score]}")
+    for f1_score in f1_score_test:
+        # Model, train, test
+        print(f"{question},{temporality},all,{label},{mode},{f1_score},{f1_score_train[f1_score]},{f1_score_test[f1_score]}")
 
 
 def main():
