@@ -5,9 +5,9 @@ from .structure import Structure
 class FeatureSelection(Structure):
 
     def apply(
-            self, X: pd.DataFrame, y: pd.Series, n_features: int = 10  
-        ) -> pd.DataFrame:
-        
+        self, X: pd.DataFrame, y: pd.Series, n_features: int = 10
+    ) -> pd.DataFrame:
+
         from sklearn.feature_selection import SelectKBest, f_classif, VarianceThreshold
 
         # --- Step 1: Remove constant columns (zero variance) ---
@@ -24,4 +24,3 @@ class FeatureSelection(Structure):
         X_selected = selector.fit_transform(X, y)
 
         return pd.DataFrame(X_selected)
-

@@ -66,9 +66,9 @@ def extract_data() -> tuple[pd.DataFrame, str | list]:
 
 
 def extract_data_with_arguments(
-        question: int, temporality: bool, feature: str, label: str 
-    ) -> tuple[pd.DataFrame, str | list]:
-    
+    question: int, temporality: bool, feature: str, label: str
+) -> tuple[pd.DataFrame, str | list]:
+
     extract = DataExtractor()
 
     return extract.extract_csv(
@@ -217,7 +217,7 @@ def testing_models():
 
 
 def testing_models_with_arguments(args):
-    
+
     feature = "" if args.feature == "All features" else args.feature
     temporality = True if args.temporality == "True" else False
     question = int(args.question)
@@ -225,7 +225,9 @@ def testing_models_with_arguments(args):
     mode = args.mode
 
     # Extract csv data for temporality, question and feature
-    dataframe, label_names = extract_data_with_arguments(feature=feature, temporality=temporality, question=question, label=label)
+    dataframe, label_names = extract_data_with_arguments(
+        feature=feature, temporality=temporality, question=question, label=label
+    )
 
     # Split X, X_id and y
     X, X_id, y = extract_dataframes_and_series(
@@ -243,15 +245,19 @@ def testing_models_with_arguments(args):
     # Check the F1 SCORE for each model
     for f1_score in f1_score_test:
         # Model, train, test
-        print(f"{question},{temporality},all,{label},{mode},{f1_score},{f1_score_train[f1_score]},{f1_score_test[f1_score]}")
+        print(
+            f"{question},{temporality},all,{label},{mode},{f1_score},{f1_score_train[f1_score]},{f1_score_test[f1_score]}"
+        )
 
 
 def main():
 
     parser = argparse.ArgumentParser()
 
-    # Parser for questions 
-    parser.add_argument("--question", type=int, help="Number of question. Example: 1, 2, 3, 4 or 5")
+    # Parser for questions
+    parser.add_argument(
+        "--question", type=int, help="Number of question. Example: 1, 2, 3, 4 or 5"
+    )
     # Parser for features
     parser.add_argument("--feature", type=str, help="Feature")
     # Parser for label

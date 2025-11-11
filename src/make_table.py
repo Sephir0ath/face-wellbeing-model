@@ -1,12 +1,33 @@
 import pandas as pd
 
-def main(): 
+
+def main(question: int, label: str, mode: str):
     data = pd.read_csv("data.csv")
-    data_1 = data[(data["question"] == 1) & (data["label"] == "anxiety") & (data["mode"] == "selection feature")]
-    data_2 = data[(data["question"] == 2) & (data["label"] == "anxiety") & (data["mode"] == "selection feature")]
-    data_3 = data[(data["question"] == 3) & (data["label"] == "anxiety") & (data["mode"] == "selection feature")]
-    data_4 = data[(data["question"] == 4) & (data["label"] == "anxiety") & (data["mode"] == "selection feature")]
-    data_5 = data[(data["question"] == 5) & (data["label"] == "anxiety") & (data["mode"] == "selection feature")]
+    data_1 = data[
+        (data["question"] == question)
+        & (data["label"] == label)
+        & (data["mode"] == mode)
+    ]
+    data_2 = data[
+        (data["question"] == question)
+        & (data["label"] == label)
+        & (data["mode"] == mode)
+    ]
+    data_3 = data[
+        (data["question"] == question)
+        & (data["label"] == label)
+        & (data["mode"] == mode)
+    ]
+    data_4 = data[
+        (data["question"] == question)
+        & (data["label"] == label)
+        & (data["mode"] == mode)
+    ]
+    data_5 = data[
+        (data["question"] == question)
+        & (data["label"] == label)
+        & (data["mode"] == mode)
+    ]
 
     my_list = [data_1, data_2, data_3, data_4, data_5]
 

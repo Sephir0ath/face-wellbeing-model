@@ -38,8 +38,9 @@ class Models:
         X_test: pd.DataFrame,
         models: list = MODELS,
     ) -> dict:
-        
-        if not self.arguments: print("Model training and predictions... \n\n")
+
+        if not self.arguments:
+            print("Model training and predictions... \n\n")
         predict = {}
 
         for model in models:
