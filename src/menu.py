@@ -11,6 +11,8 @@ from sklearn.ensemble import (
 from sklearn.svm import SVC, LinearSVC
 from sklearn.naive_bayes import GaussianNB
 
+from tensorflow.keras.layers import LSTM
+
 
 def select_question() -> int:
     questions = [str(i + 1) for i in range(5)]
@@ -65,32 +67,39 @@ def select_label() -> str:
     return response
 
 
-def select_model():
-    models = [
-        "all",
-        "LogisticRegression",
-        "KNeighborsClassifier",
-        "DecisionTreeClassifier",
-        "RandomForestClassifier",
-        "SVC",
-        "LinearSVC",
-        "GaussianNB",
-        "GradientBoostingClassifier",
-        "HistGradientBoostingClassifier",
-    ]
+def select_model(temporality: bool = False):
+    if not temporality:
+        models = [
+            "all",
+            "LogisticRegression",
+            "KNeighborsClassifier",
+            "DecisionTreeClassifier",
+            "RandomForestClassifier",
+            "SVC",
+            "LinearSVC",
+            "GaussianNB",
+            "GradientBoostingClassifier",
+            "HistGradientBoostingClassifier",
+        ]
 
-    models_dict = {
-        "all": "",
-        "LogisticRegression": LogisticRegression,
-        "KNeighborsClassifier": KNeighborsClassifier,
-        "DecisionTreeClassifier": DecisionTreeClassifier,
-        "RandomForestClassifier": RandomForestClassifier,
-        "SVC": SVC,
-        "LinearSVC": LinearSVC,
-        "GaussianNB": GaussianNB,
-        "GradientBoostingClassifier": GradientBoostingClassifier,
-        "HistGradientBoostingClassifier": HistGradientBoostingClassifier,
-    }
+        models_dict = {
+            "all": "",
+            "LogisticRegression": LogisticRegression,
+            "KNeighborsClassifier": KNeighborsClassifier,
+            "DecisionTreeClassifier": DecisionTreeClassifier,
+            "RandomForestClassifier": RandomForestClassifier,
+            "SVC": SVC,
+            "LinearSVC": LinearSVC,
+            "GaussianNB": GaussianNB,
+            "GradientBoostingClassifier": GradientBoostingClassifier,
+            "HistGradientBoostingClassifier": HistGradientBoostingClassifier,
+        }
+    else:
+        models = [
+            "LSTM",
+        ]
+
+        models_dict = {"LSTM": LSTM}
 
     response = select("Select model:", choices=models).ask()
     response = models_dict[response]

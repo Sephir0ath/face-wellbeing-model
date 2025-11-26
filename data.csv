@@ -1,0 +1,451 @@
+question,temporality,feature,label,mode,model,f1_train,f1_test
+1,False,all,depression,selection feature,LogisticRegression,0.75,0.905982905982906
+1,False,all,depression,selection feature,KNeighborsClassifier,1.0,0.8166666666666667
+1,False,all,depression,selection feature,DecisionTreeClassifier,0.8161764705882353,0.5454545454545454
+1,False,all,depression,selection feature,RandomForestClassifier,1.0,0.6333333333333333
+1,False,all,depression,selection feature,SVC,0.8263888888888888,0.905982905982906
+1,False,all,depression,selection feature,LinearSVC,0.7028862478777589,0.8035714285714286
+1,False,all,depression,selection feature,GaussianNB,0.512987012987013,0.8035714285714286
+1,False,all,depression,selection feature,GradientBoostingClassifier,1.0,0.717948717948718
+1,False,all,depression,selection feature,HistGradientBoostingClassifier,0.40476190476190477,0.3125
+1,False,all,depression,PCA,LogisticRegression,1.0,0.5299145299145299
+1,False,all,depression,PCA,KNeighborsClassifier,1.0,0.6333333333333333
+1,False,all,depression,PCA,DecisionTreeClassifier,0.9007936507936507,0.3418803418803419
+1,False,all,depression,PCA,RandomForestClassifier,1.0,0.4107142857142857
+1,False,all,depression,PCA,SVC,0.8726655348047538,0.5299145299145299
+1,False,all,depression,PCA,LinearSVC,1.0,0.45
+1,False,all,depression,PCA,GaussianNB,0.8333333333333334,0.5454545454545454
+1,False,all,depression,PCA,GradientBoostingClassifier,1.0,0.3418803418803419
+1,False,all,depression,PCA,HistGradientBoostingClassifier,0.40476190476190477,0.3125
+1,False,all,depression,t-SNE,LogisticRegression,0.5,0.3418803418803419
+1,False,all,depression,t-SNE,KNeighborsClassifier,1.0,0.26666666666666666
+1,False,all,depression,t-SNE,DecisionTreeClassifier,0.8663101604278074,0.21428571428571427
+1,False,all,depression,t-SNE,RandomForestClassifier,1.0,0.26666666666666666
+1,False,all,depression,t-SNE,SVC,0.8263888888888888,0.3125
+1,False,all,depression,t-SNE,LinearSVC,0.5,0.3418803418803419
+1,False,all,depression,t-SNE,GaussianNB,0.5257452574525745,0.3125
+1,False,all,depression,t-SNE,GradientBoostingClassifier,1.0,0.45
+1,False,all,depression,t-SNE,HistGradientBoostingClassifier,0.40476190476190477,0.3125
+1,False,all,depression,SMOTE,LogisticRegression,1.0,0.6333333333333333
+1,False,all,depression,SMOTE,KNeighborsClassifier,1.0,0.26666666666666666
+1,False,all,depression,SMOTE,DecisionTreeClassifier,0.9409722222222222,0.717948717948718
+1,False,all,depression,SMOTE,RandomForestClassifier,1.0,0.6333333333333333
+1,False,all,depression,SMOTE,SVC,0.7895667550839964,0.26666666666666666
+1,False,all,depression,SMOTE,LinearSVC,1.0,0.6333333333333333
+1,False,all,depression,SMOTE,GaussianNB,0.9705627705627706,0.9090909090909091
+1,False,all,depression,SMOTE,GradientBoostingClassifier,1.0,0.717948717948718
+1,False,all,depression,SMOTE,HistGradientBoostingClassifier,0.3333333333333333,0.3125
+1,False,all,depression,Pass,LogisticRegression,1.0,0.6333333333333333
+1,False,all,depression,Pass,KNeighborsClassifier,1.0,0.6333333333333333
+1,False,all,depression,Pass,DecisionTreeClassifier,0.9131944444444444,0.717948717948718
+1,False,all,depression,Pass,RandomForestClassifier,1.0,0.47619047619047616
+1,False,all,depression,Pass,SVC,0.40476190476190477,0.3125
+1,False,all,depression,Pass,LinearSVC,1.0,0.6333333333333333
+1,False,all,depression,Pass,GaussianNB,0.9554367201426025,0.9090909090909091
+1,False,all,depression,Pass,GradientBoostingClassifier,1.0,0.717948717948718
+1,False,all,depression,Pass,HistGradientBoostingClassifier,0.40476190476190477,0.3125
+1,False,all,anxiety,selection feature,LogisticRegression,0.7564935064935066,0.717948717948718
+1,False,all,anxiety,selection feature,KNeighborsClassifier,1.0,0.717948717948718
+1,False,all,anxiety,selection feature,DecisionTreeClassifier,0.9597423510466989,0.4107142857142857
+1,False,all,anxiety,selection feature,RandomForestClassifier,1.0,0.8166666666666667
+1,False,all,anxiety,selection feature,SVC,0.7564935064935066,0.717948717948718
+1,False,all,anxiety,selection feature,LinearSVC,0.7947454844006567,0.8166666666666667
+1,False,all,anxiety,selection feature,GaussianNB,0.8376623376623377,0.6333333333333333
+1,False,all,anxiety,selection feature,GradientBoostingClassifier,1.0,0.7272727272727273
+1,False,all,anxiety,selection feature,HistGradientBoostingClassifier,0.358974358974359,0.3125
+1,False,all,anxiety,PCA,LogisticRegression,1.0,0.45
+1,False,all,anxiety,PCA,KNeighborsClassifier,1.0,0.26666666666666666
+1,False,all,anxiety,PCA,DecisionTreeClassifier,1.0,0.45
+1,False,all,anxiety,PCA,RandomForestClassifier,1.0,0.4107142857142857
+1,False,all,anxiety,PCA,SVC,0.9166666666666667,0.47619047619047616
+1,False,all,anxiety,PCA,LinearSVC,1.0,0.26666666666666666
+1,False,all,anxiety,PCA,GaussianNB,1.0,0.26666666666666666
+1,False,all,anxiety,PCA,GradientBoostingClassifier,1.0,0.45
+1,False,all,anxiety,PCA,HistGradientBoostingClassifier,0.358974358974359,0.3125
+1,False,all,anxiety,t-SNE,LogisticRegression,0.5993589743589745,0.45
+1,False,all,anxiety,t-SNE,KNeighborsClassifier,1.0,0.5299145299145299
+1,False,all,anxiety,t-SNE,DecisionTreeClassifier,0.8376623376623377,0.26666666666666666
+1,False,all,anxiety,t-SNE,RandomForestClassifier,1.0,0.15384615384615385
+1,False,all,anxiety,t-SNE,SVC,0.7987117552334944,0.5299145299145299
+1,False,all,anxiety,t-SNE,LinearSVC,0.5993589743589745,0.45
+1,False,all,anxiety,t-SNE,GaussianNB,0.5941558441558441,0.26666666666666666
+1,False,all,anxiety,t-SNE,GradientBoostingClassifier,1.0,0.26666666666666666
+1,False,all,anxiety,t-SNE,HistGradientBoostingClassifier,0.358974358974359,0.3125
+1,False,all,anxiety,SMOTE,LogisticRegression,1.0,0.5299145299145299
+1,False,all,anxiety,SMOTE,KNeighborsClassifier,1.0,0.26666666666666666
+1,False,all,anxiety,SMOTE,DecisionTreeClassifier,0.9642401021711366,0.8166666666666667
+1,False,all,anxiety,SMOTE,RandomForestClassifier,1.0,0.6333333333333333
+1,False,all,anxiety,SMOTE,SVC,0.7496807151979565,0.717948717948718
+1,False,all,anxiety,SMOTE,LinearSVC,1.0,0.5299145299145299
+1,False,all,anxiety,SMOTE,GaussianNB,0.9642401021711366,0.5454545454545454
+1,False,all,anxiety,SMOTE,GradientBoostingClassifier,1.0,0.8166666666666667
+1,False,all,anxiety,SMOTE,HistGradientBoostingClassifier,0.3333333333333333,0.35294117647058826
+1,False,all,anxiety,Pass,LogisticRegression,1.0,0.5299145299145299
+1,False,all,anxiety,Pass,KNeighborsClassifier,1.0,0.26666666666666666
+1,False,all,anxiety,Pass,DecisionTreeClassifier,0.9198717948717949,0.8166666666666667
+1,False,all,anxiety,Pass,RandomForestClassifier,1.0,0.5299145299145299
+1,False,all,anxiety,Pass,SVC,0.3055555555555556,0.35294117647058826
+1,False,all,anxiety,Pass,LinearSVC,1.0,0.5299145299145299
+1,False,all,anxiety,Pass,GaussianNB,0.9198717948717949,0.5454545454545454
+1,False,all,anxiety,Pass,GradientBoostingClassifier,1.0,0.8166666666666667
+1,False,all,anxiety,Pass,HistGradientBoostingClassifier,0.358974358974359,0.3125
+2,False,all,depression,selection feature,LogisticRegression,0.7771836007130125,1.0
+2,False,all,depression,selection feature,KNeighborsClassifier,1.0,0.6071428571428572
+2,False,all,depression,selection feature,DecisionTreeClassifier,0.9007936507936507,0.717948717948718
+2,False,all,depression,selection feature,RandomForestClassifier,1.0,0.717948717948718
+2,False,all,depression,selection feature,SVC,0.8015873015873016,0.6071428571428572
+2,False,all,depression,selection feature,LinearSVC,0.7771836007130125,1.0
+2,False,all,depression,selection feature,GaussianNB,0.7771836007130125,1.0
+2,False,all,depression,selection feature,GradientBoostingClassifier,1.0,0.47619047619047616
+2,False,all,depression,selection feature,HistGradientBoostingClassifier,0.40476190476190477,0.3125
+2,False,all,depression,PCA,LogisticRegression,1.0,0.6071428571428572
+2,False,all,depression,PCA,KNeighborsClassifier,1.0,0.47619047619047616
+2,False,all,depression,PCA,DecisionTreeClassifier,0.7771836007130125,0.45
+2,False,all,depression,PCA,RandomForestClassifier,1.0,0.3125
+2,False,all,depression,PCA,SVC,0.8663101604278074,0.6333333333333333
+2,False,all,depression,PCA,LinearSVC,1.0,0.5454545454545454
+2,False,all,depression,PCA,GaussianNB,0.9007936507936507,0.5299145299145299
+2,False,all,depression,PCA,GradientBoostingClassifier,1.0,0.26666666666666666
+2,False,all,depression,PCA,HistGradientBoostingClassifier,0.40476190476190477,0.3125
+2,False,all,depression,t-SNE,LogisticRegression,0.7028862478777589,0.5454545454545454
+2,False,all,depression,t-SNE,KNeighborsClassifier,1.0,0.47619047619047616
+2,False,all,depression,t-SNE,DecisionTreeClassifier,0.8263888888888888,0.47619047619047616
+2,False,all,depression,t-SNE,RandomForestClassifier,1.0,0.3125
+2,False,all,depression,t-SNE,SVC,0.8263888888888888,0.4107142857142857
+2,False,all,depression,t-SNE,LinearSVC,0.7028862478777589,0.6333333333333333
+2,False,all,depression,t-SNE,GaussianNB,0.5614035087719298,0.3125
+2,False,all,depression,t-SNE,GradientBoostingClassifier,1.0,0.47619047619047616
+2,False,all,depression,t-SNE,HistGradientBoostingClassifier,0.40476190476190477,0.3125
+2,False,all,depression,SMOTE,LogisticRegression,1.0,0.5299145299145299
+2,False,all,depression,SMOTE,KNeighborsClassifier,1.0,0.6333333333333333
+2,False,all,depression,SMOTE,DecisionTreeClassifier,1.0,0.5299145299145299
+2,False,all,depression,SMOTE,RandomForestClassifier,1.0,0.26666666666666666
+2,False,all,depression,SMOTE,SVC,0.5041666666666667,0.35294117647058826
+2,False,all,depression,SMOTE,LinearSVC,1.0,0.5299145299145299
+2,False,all,depression,SMOTE,GaussianNB,1.0,0.3125
+2,False,all,depression,SMOTE,GradientBoostingClassifier,1.0,0.6333333333333333
+2,False,all,depression,SMOTE,HistGradientBoostingClassifier,0.3333333333333333,0.3125
+2,False,all,depression,Pass,LogisticRegression,1.0,0.5299145299145299
+2,False,all,depression,Pass,KNeighborsClassifier,1.0,0.47619047619047616
+2,False,all,depression,Pass,DecisionTreeClassifier,0.9554367201426025,0.5299145299145299
+2,False,all,depression,Pass,RandomForestClassifier,1.0,0.21428571428571427
+2,False,all,depression,Pass,SVC,0.41666666666666663,0.35294117647058826
+2,False,all,depression,Pass,LinearSVC,1.0,0.5299145299145299
+2,False,all,depression,Pass,GaussianNB,1.0,0.26666666666666666
+2,False,all,depression,Pass,GradientBoostingClassifier,1.0,0.717948717948718
+2,False,all,depression,Pass,HistGradientBoostingClassifier,0.40476190476190477,0.3125
+2,False,all,anxiety,selection feature,LogisticRegression,0.8376623376623377,0.7272727272727273
+2,False,all,anxiety,selection feature,KNeighborsClassifier,1.0,0.6333333333333333
+2,False,all,anxiety,selection feature,DecisionTreeClassifier,0.9188311688311688,0.717948717948718
+2,False,all,anxiety,selection feature,RandomForestClassifier,1.0,0.6333333333333333
+2,False,all,anxiety,selection feature,SVC,0.8397435897435898,0.7272727272727273
+2,False,all,anxiety,selection feature,LinearSVC,0.8792270531400965,0.7272727272727273
+2,False,all,anxiety,selection feature,GaussianNB,0.9589490968801313,0.7272727272727273
+2,False,all,anxiety,selection feature,GradientBoostingClassifier,1.0,0.6333333333333333
+2,False,all,anxiety,selection feature,HistGradientBoostingClassifier,0.358974358974359,0.3125
+2,False,all,anxiety,PCA,LogisticRegression,1.0,0.5299145299145299
+2,False,all,anxiety,PCA,KNeighborsClassifier,1.0,0.26666666666666666
+2,False,all,anxiety,PCA,DecisionTreeClassifier,1.0,0.5454545454545454
+2,False,all,anxiety,PCA,RandomForestClassifier,1.0,0.4107142857142857
+2,False,all,anxiety,PCA,SVC,0.6666666666666667,0.3125
+2,False,all,anxiety,PCA,LinearSVC,1.0,0.5299145299145299
+2,False,all,anxiety,PCA,GaussianNB,0.72,0.45
+2,False,all,anxiety,PCA,GradientBoostingClassifier,1.0,0.5454545454545454
+2,False,all,anxiety,PCA,HistGradientBoostingClassifier,0.358974358974359,0.3125
+2,False,all,anxiety,t-SNE,LogisticRegression,0.6376811594202898,0.8166666666666667
+2,False,all,anxiety,t-SNE,KNeighborsClassifier,1.0,0.717948717948718
+2,False,all,anxiety,t-SNE,DecisionTreeClassifier,0.8397435897435898,0.6071428571428572
+2,False,all,anxiety,t-SNE,RandomForestClassifier,1.0,0.6333333333333333
+2,False,all,anxiety,t-SNE,SVC,0.8768472906403941,0.6333333333333333
+2,False,all,anxiety,t-SNE,LinearSVC,0.6376811594202898,0.8166666666666667
+2,False,all,anxiety,t-SNE,GaussianNB,0.5833333333333333,0.5454545454545454
+2,False,all,anxiety,t-SNE,GradientBoostingClassifier,1.0,0.6333333333333333
+2,False,all,anxiety,t-SNE,HistGradientBoostingClassifier,0.358974358974359,0.3125
+2,False,all,anxiety,SMOTE,LogisticRegression,1.0,0.36363636363636365
+2,False,all,anxiety,SMOTE,KNeighborsClassifier,1.0,0.26666666666666666
+2,False,all,anxiety,SMOTE,DecisionTreeClassifier,1.0,0.6333333333333333
+2,False,all,anxiety,SMOTE,RandomForestClassifier,1.0,0.5299145299145299
+2,False,all,anxiety,SMOTE,SVC,0.5354449472096531,0.3125
+2,False,all,anxiety,SMOTE,LinearSVC,1.0,0.36363636363636365
+2,False,all,anxiety,SMOTE,GaussianNB,0.9282051282051282,0.26666666666666666
+2,False,all,anxiety,SMOTE,GradientBoostingClassifier,1.0,0.717948717948718
+2,False,all,anxiety,SMOTE,HistGradientBoostingClassifier,0.3333333333333333,0.35294117647058826
+2,False,all,anxiety,Pass,LogisticRegression,1.0,0.36363636363636365
+2,False,all,anxiety,Pass,KNeighborsClassifier,1.0,0.21428571428571427
+2,False,all,anxiety,Pass,DecisionTreeClassifier,0.9597423510466989,0.717948717948718
+2,False,all,anxiety,Pass,RandomForestClassifier,1.0,0.5299145299145299
+2,False,all,anxiety,Pass,SVC,0.6031746031746031,0.3125
+2,False,all,anxiety,Pass,LinearSVC,1.0,0.36363636363636365
+2,False,all,anxiety,Pass,GaussianNB,0.9198717948717949,0.4107142857142857
+2,False,all,anxiety,Pass,GradientBoostingClassifier,1.0,0.7272727272727273
+2,False,all,anxiety,Pass,HistGradientBoostingClassifier,0.358974358974359,0.3125
+3,False,all,depression,selection feature,LogisticRegression,0.6666666666666667,0.717948717948718
+3,False,all,depression,selection feature,KNeighborsClassifier,1.0,0.47619047619047616
+3,False,all,depression,selection feature,DecisionTreeClassifier,0.8440748440748441,0.47619047619047616
+3,False,all,depression,selection feature,RandomForestClassifier,1.0,0.47619047619047616
+3,False,all,depression,selection feature,SVC,0.7086247086247086,0.47619047619047616
+3,False,all,depression,selection feature,LinearSVC,0.7242647058823529,0.8166666666666667
+3,False,all,depression,selection feature,GaussianNB,0.6527777777777778,0.9090909090909091
+3,False,all,depression,selection feature,GradientBoostingClassifier,1.0,0.47619047619047616
+3,False,all,depression,selection feature,HistGradientBoostingClassifier,0.40476190476190477,0.3125
+3,False,all,depression,PCA,LogisticRegression,1.0,0.5299145299145299
+3,False,all,depression,PCA,KNeighborsClassifier,1.0,0.26666666666666666
+3,False,all,depression,PCA,DecisionTreeClassifier,0.9523809523809523,0.3125
+3,False,all,depression,PCA,RandomForestClassifier,1.0,0.3125
+3,False,all,depression,PCA,SVC,0.64,0.26666666666666666
+3,False,all,depression,PCA,LinearSVC,1.0,0.45
+3,False,all,depression,PCA,GaussianNB,0.9554367201426025,0.47619047619047616
+3,False,all,depression,PCA,GradientBoostingClassifier,1.0,0.3125
+3,False,all,depression,PCA,HistGradientBoostingClassifier,0.40476190476190477,0.3125
+3,False,all,depression,t-SNE,LogisticRegression,0.6666666666666666,0.45
+3,False,all,depression,t-SNE,KNeighborsClassifier,1.0,0.3125
+3,False,all,depression,t-SNE,DecisionTreeClassifier,0.9007936507936507,0.26666666666666666
+3,False,all,depression,t-SNE,RandomForestClassifier,1.0,0.4107142857142857
+3,False,all,depression,t-SNE,SVC,0.8263888888888888,0.5299145299145299
+3,False,all,depression,t-SNE,LinearSVC,0.6666666666666666,0.45
+3,False,all,depression,t-SNE,GaussianNB,0.625,0.3125
+3,False,all,depression,t-SNE,GradientBoostingClassifier,1.0,0.45
+3,False,all,depression,t-SNE,HistGradientBoostingClassifier,0.40476190476190477,0.3125
+3,False,all,depression,SMOTE,LogisticRegression,1.0,0.47619047619047616
+3,False,all,depression,SMOTE,KNeighborsClassifier,1.0,0.15384615384615385
+3,False,all,depression,SMOTE,DecisionTreeClassifier,1.0,0.5454545454545454
+3,False,all,depression,SMOTE,RandomForestClassifier,1.0,0.4107142857142857
+3,False,all,depression,SMOTE,SVC,0.6386473429951691,0.3418803418803419
+3,False,all,depression,SMOTE,LinearSVC,1.0,0.3125
+3,False,all,depression,SMOTE,GaussianNB,1.0,0.47619047619047616
+3,False,all,depression,SMOTE,GradientBoostingClassifier,1.0,0.45
+3,False,all,depression,SMOTE,HistGradientBoostingClassifier,0.3333333333333333,0.3125
+3,False,all,depression,Pass,LogisticRegression,1.0,0.3125
+3,False,all,depression,Pass,KNeighborsClassifier,1.0,0.18181818181818182
+3,False,all,depression,Pass,DecisionTreeClassifier,0.9554367201426025,0.5299145299145299
+3,False,all,depression,Pass,RandomForestClassifier,1.0,0.3125
+3,False,all,depression,Pass,SVC,0.5571658615136876,0.3418803418803419
+3,False,all,depression,Pass,LinearSVC,1.0,0.3125
+3,False,all,depression,Pass,GaussianNB,1.0,0.4107142857142857
+3,False,all,depression,Pass,GradientBoostingClassifier,1.0,0.45
+3,False,all,depression,Pass,HistGradientBoostingClassifier,0.40476190476190477,0.3125
+3,False,all,anxiety,selection feature,LogisticRegression,0.7947454844006567,0.8166666666666667
+3,False,all,anxiety,selection feature,KNeighborsClassifier,1.0,0.6333333333333333
+3,False,all,anxiety,selection feature,DecisionTreeClassifier,0.8333333333333334,0.717948717948718
+3,False,all,anxiety,selection feature,RandomForestClassifier,1.0,0.8166666666666667
+3,False,all,anxiety,selection feature,SVC,0.7877758913412564,0.717948717948718
+3,False,all,anxiety,selection feature,LinearSVC,0.7947454844006567,0.8166666666666667
+3,False,all,anxiety,selection feature,GaussianNB,0.7181964573268921,0.8166666666666667
+3,False,all,anxiety,selection feature,GradientBoostingClassifier,1.0,0.717948717948718
+3,False,all,anxiety,selection feature,HistGradientBoostingClassifier,0.358974358974359,0.3125
+3,False,all,anxiety,PCA,LogisticRegression,1.0,0.8166666666666667
+3,False,all,anxiety,PCA,KNeighborsClassifier,1.0,0.45
+3,False,all,anxiety,PCA,DecisionTreeClassifier,0.9589490968801313,0.4107142857142857
+3,False,all,anxiety,PCA,RandomForestClassifier,1.0,0.45
+3,False,all,anxiety,PCA,SVC,0.7596153846153846,0.6333333333333333
+3,False,all,anxiety,PCA,LinearSVC,1.0,0.8166666666666667
+3,False,all,anxiety,PCA,GaussianNB,0.7564935064935066,0.5454545454545454
+3,False,all,anxiety,PCA,GradientBoostingClassifier,1.0,0.36363636363636365
+3,False,all,anxiety,PCA,HistGradientBoostingClassifier,0.358974358974359,0.3125
+3,False,all,anxiety,t-SNE,LogisticRegression,0.5993589743589745,0.4107142857142857
+3,False,all,anxiety,t-SNE,KNeighborsClassifier,1.0,0.45
+3,False,all,anxiety,t-SNE,DecisionTreeClassifier,0.8376623376623377,0.45
+3,False,all,anxiety,t-SNE,RandomForestClassifier,1.0,0.26666666666666666
+3,False,all,anxiety,t-SNE,SVC,0.8,0.5299145299145299
+3,False,all,anxiety,t-SNE,LinearSVC,0.5993589743589745,0.4107142857142857
+3,False,all,anxiety,t-SNE,GaussianNB,0.5941558441558441,0.26666666666666666
+3,False,all,anxiety,t-SNE,GradientBoostingClassifier,1.0,0.45
+3,False,all,anxiety,t-SNE,HistGradientBoostingClassifier,0.358974358974359,0.3125
+3,False,all,anxiety,SMOTE,LogisticRegression,1.0,0.7272727272727273
+3,False,all,anxiety,SMOTE,KNeighborsClassifier,1.0,0.717948717948718
+3,False,all,anxiety,SMOTE,DecisionTreeClassifier,0.9642401021711366,0.5299145299145299
+3,False,all,anxiety,SMOTE,RandomForestClassifier,1.0,0.5454545454545454
+3,False,all,anxiety,SMOTE,SVC,0.7083333333333333,0.4107142857142857
+3,False,all,anxiety,SMOTE,LinearSVC,1.0,0.7272727272727273
+3,False,all,anxiety,SMOTE,GaussianNB,1.0,0.4107142857142857
+3,False,all,anxiety,SMOTE,GradientBoostingClassifier,1.0,0.717948717948718
+3,False,all,anxiety,SMOTE,HistGradientBoostingClassifier,0.3333333333333333,0.35294117647058826
+3,False,all,anxiety,Pass,LogisticRegression,1.0,0.7272727272727273
+3,False,all,anxiety,Pass,KNeighborsClassifier,1.0,0.45
+3,False,all,anxiety,Pass,DecisionTreeClassifier,1.0,0.5454545454545454
+3,False,all,anxiety,Pass,RandomForestClassifier,1.0,0.5299145299145299
+3,False,all,anxiety,Pass,SVC,0.75,0.4107142857142857
+3,False,all,anxiety,Pass,LinearSVC,1.0,0.7272727272727273
+3,False,all,anxiety,Pass,GaussianNB,1.0,0.4107142857142857
+3,False,all,anxiety,Pass,GradientBoostingClassifier,1.0,0.6333333333333333
+3,False,all,anxiety,Pass,HistGradientBoostingClassifier,0.358974358974359,0.3125
+4,False,all,depression,selection feature,LogisticRegression,0.8263888888888888,0.45
+4,False,all,depression,selection feature,KNeighborsClassifier,1.0,0.717948717948718
+4,False,all,depression,selection feature,DecisionTreeClassifier,0.8571428571428572,0.5299145299145299
+4,False,all,depression,selection feature,RandomForestClassifier,1.0,0.5299145299145299
+4,False,all,depression,selection feature,SVC,0.7242647058823529,0.47619047619047616
+4,False,all,depression,selection feature,LinearSVC,0.8263888888888888,0.26666666666666666
+4,False,all,depression,selection feature,GaussianNB,0.7771836007130125,0.7272727272727273
+4,False,all,depression,selection feature,GradientBoostingClassifier,1.0,0.3418803418803419
+4,False,all,depression,selection feature,HistGradientBoostingClassifier,0.40476190476190477,0.3125
+4,False,all,depression,PCA,LogisticRegression,1.0,0.5299145299145299
+4,False,all,depression,PCA,KNeighborsClassifier,1.0,0.6333333333333333
+4,False,all,depression,PCA,DecisionTreeClassifier,0.8663101604278074,0.15384615384615385
+4,False,all,depression,PCA,RandomForestClassifier,1.0,0.4107142857142857
+4,False,all,depression,PCA,SVC,0.8161764705882353,0.36363636363636365
+4,False,all,depression,PCA,LinearSVC,1.0,0.4107142857142857
+4,False,all,depression,PCA,GaussianNB,0.8726655348047538,0.5454545454545454
+4,False,all,depression,PCA,GradientBoostingClassifier,1.0,0.45
+4,False,all,depression,PCA,HistGradientBoostingClassifier,0.40476190476190477,0.3125
+4,False,all,depression,t-SNE,LogisticRegression,0.5659722222222222,0.4107142857142857
+4,False,all,depression,t-SNE,KNeighborsClassifier,1.0,0.47619047619047616
+4,False,all,depression,t-SNE,DecisionTreeClassifier,0.7619047619047619,0.47619047619047616
+4,False,all,depression,t-SNE,RandomForestClassifier,1.0,0.3125
+4,False,all,depression,t-SNE,SVC,0.9080882352941176,0.4107142857142857
+4,False,all,depression,t-SNE,LinearSVC,0.5659722222222222,0.4107142857142857
+4,False,all,depression,t-SNE,GaussianNB,0.7023809523809523,0.4107142857142857
+4,False,all,depression,t-SNE,GradientBoostingClassifier,1.0,0.3125
+4,False,all,depression,t-SNE,HistGradientBoostingClassifier,0.40476190476190477,0.3125
+4,False,all,depression,SMOTE,LogisticRegression,1.0,0.26666666666666666
+4,False,all,depression,SMOTE,KNeighborsClassifier,1.0,0.26666666666666666
+4,False,all,depression,SMOTE,DecisionTreeClassifier,1.0,0.6333333333333333
+4,False,all,depression,SMOTE,RandomForestClassifier,1.0,0.26666666666666666
+4,False,all,depression,SMOTE,SVC,0.7895667550839964,0.26666666666666666
+4,False,all,depression,SMOTE,LinearSVC,0.9705627705627706,0.26666666666666666
+4,False,all,depression,SMOTE,GaussianNB,0.9705627705627706,0.15384615384615385
+4,False,all,depression,SMOTE,GradientBoostingClassifier,1.0,0.3418803418803419
+4,False,all,depression,SMOTE,HistGradientBoostingClassifier,0.3333333333333333,0.3125
+4,False,all,depression,Pass,LogisticRegression,1.0,0.26666666666666666
+4,False,all,depression,Pass,KNeighborsClassifier,1.0,0.5454545454545454
+4,False,all,depression,Pass,DecisionTreeClassifier,1.0,0.26666666666666666
+4,False,all,depression,Pass,RandomForestClassifier,1.0,0.21428571428571427
+4,False,all,depression,Pass,SVC,0.8726655348047538,0.3418803418803419
+4,False,all,depression,Pass,LinearSVC,0.9131944444444444,0.26666666666666666
+4,False,all,depression,Pass,GaussianNB,0.9554367201426025,0.15384615384615385
+4,False,all,depression,Pass,GradientBoostingClassifier,1.0,0.26666666666666666
+4,False,all,depression,Pass,HistGradientBoostingClassifier,0.40476190476190477,0.3125
+4,False,all,anxiety,selection feature,LogisticRegression,0.8768472906403941,0.6333333333333333
+4,False,all,anxiety,selection feature,KNeighborsClassifier,1.0,0.6071428571428572
+4,False,all,anxiety,selection feature,DecisionTreeClassifier,0.88,0.717948717948718
+4,False,all,anxiety,selection feature,RandomForestClassifier,1.0,0.717948717948718
+4,False,all,anxiety,selection feature,SVC,0.7395833333333333,0.717948717948718
+4,False,all,anxiety,selection feature,LinearSVC,0.9188311688311688,0.6333333333333333
+4,False,all,anxiety,selection feature,GaussianNB,0.9589490968801313,0.6333333333333333
+4,False,all,anxiety,selection feature,GradientBoostingClassifier,1.0,0.717948717948718
+4,False,all,anxiety,selection feature,HistGradientBoostingClassifier,0.358974358974359,0.3125
+4,False,all,anxiety,PCA,LogisticRegression,1.0,0.45
+4,False,all,anxiety,PCA,KNeighborsClassifier,1.0,0.6071428571428572
+4,False,all,anxiety,PCA,DecisionTreeClassifier,0.9589490968801313,0.4107142857142857
+4,False,all,anxiety,PCA,RandomForestClassifier,1.0,0.47619047619047616
+4,False,all,anxiety,PCA,SVC,0.9166666666666667,0.6071428571428572
+4,False,all,anxiety,PCA,LinearSVC,1.0,0.5299145299145299
+4,False,all,anxiety,PCA,GaussianNB,0.9589490968801313,0.45
+4,False,all,anxiety,PCA,GradientBoostingClassifier,1.0,0.4107142857142857
+4,False,all,anxiety,PCA,HistGradientBoostingClassifier,0.358974358974359,0.3125
+4,False,all,anxiety,t-SNE,LogisticRegression,0.5192307692307692,0.4107142857142857
+4,False,all,anxiety,t-SNE,KNeighborsClassifier,1.0,0.45
+4,False,all,anxiety,t-SNE,DecisionTreeClassifier,0.88,0.5454545454545454
+4,False,all,anxiety,t-SNE,RandomForestClassifier,1.0,0.36363636363636365
+4,False,all,anxiety,t-SNE,SVC,0.75,0.45
+4,False,all,anxiety,t-SNE,LinearSVC,0.5192307692307692,0.4107142857142857
+4,False,all,anxiety,t-SNE,GaussianNB,0.5833333333333333,0.36363636363636365
+4,False,all,anxiety,t-SNE,GradientBoostingClassifier,1.0,0.26666666666666666
+4,False,all,anxiety,t-SNE,HistGradientBoostingClassifier,0.358974358974359,0.3125
+4,False,all,anxiety,SMOTE,LogisticRegression,1.0,0.5299145299145299
+4,False,all,anxiety,SMOTE,KNeighborsClassifier,1.0,0.6071428571428572
+4,False,all,anxiety,SMOTE,DecisionTreeClassifier,1.0,0.5454545454545454
+4,False,all,anxiety,SMOTE,RandomForestClassifier,1.0,0.4107142857142857
+4,False,all,anxiety,SMOTE,SVC,0.475,0.47619047619047616
+4,False,all,anxiety,SMOTE,LinearSVC,0.9642401021711366,0.5299145299145299
+4,False,all,anxiety,SMOTE,GaussianNB,0.9642401021711366,0.21428571428571427
+4,False,all,anxiety,SMOTE,GradientBoostingClassifier,1.0,0.5454545454545454
+4,False,all,anxiety,SMOTE,HistGradientBoostingClassifier,0.3333333333333333,0.35294117647058826
+4,False,all,anxiety,Pass,LogisticRegression,1.0,0.5299145299145299
+4,False,all,anxiety,Pass,KNeighborsClassifier,1.0,0.6071428571428572
+4,False,all,anxiety,Pass,DecisionTreeClassifier,1.0,0.5454545454545454
+4,False,all,anxiety,Pass,RandomForestClassifier,1.0,0.47619047619047616
+4,False,all,anxiety,Pass,SVC,0.45175438596491224,0.47619047619047616
+4,False,all,anxiety,Pass,LinearSVC,0.9589490968801313,0.5299145299145299
+4,False,all,anxiety,Pass,GaussianNB,0.9597423510466989,0.21428571428571427
+4,False,all,anxiety,Pass,GradientBoostingClassifier,1.0,0.5454545454545454
+4,False,all,anxiety,Pass,HistGradientBoostingClassifier,0.358974358974359,0.3125
+5,False,all,depression,selection feature,LogisticRegression,0.8726655348047538,0.717948717948718
+5,False,all,depression,selection feature,KNeighborsClassifier,1.0,0.717948717948718
+5,False,all,depression,selection feature,DecisionTreeClassifier,0.9554367201426025,0.7272727272727273
+5,False,all,depression,selection feature,RandomForestClassifier,1.0,0.6333333333333333
+5,False,all,depression,selection feature,SVC,0.8726655348047538,0.6071428571428572
+5,False,all,depression,selection feature,LinearSVC,0.9131944444444444,0.717948717948718
+5,False,all,depression,selection feature,GaussianNB,0.8015873015873016,0.5299145299145299
+5,False,all,depression,selection feature,GradientBoostingClassifier,1.0,0.7272727272727273
+5,False,all,depression,selection feature,HistGradientBoostingClassifier,0.40476190476190477,0.3125
+5,False,all,depression,PCA,LogisticRegression,1.0,0.15384615384615385
+5,False,all,depression,PCA,KNeighborsClassifier,1.0,0.45
+5,False,all,depression,PCA,DecisionTreeClassifier,0.9007936507936507,0.21428571428571427
+5,False,all,depression,PCA,RandomForestClassifier,1.0,0.3418803418803419
+5,False,all,depression,PCA,SVC,0.7947454844006567,0.3418803418803419
+5,False,all,depression,PCA,LinearSVC,1.0,0.21428571428571427
+5,False,all,depression,PCA,GaussianNB,0.8333333333333334,0.18181818181818182
+5,False,all,depression,PCA,GradientBoostingClassifier,1.0,0.3418803418803419
+5,False,all,depression,PCA,HistGradientBoostingClassifier,0.40476190476190477,0.3125
+5,False,all,depression,t-SNE,LogisticRegression,0.6179966044142615,0.5299145299145299
+5,False,all,depression,t-SNE,KNeighborsClassifier,1.0,0.4107142857142857
+5,False,all,depression,t-SNE,DecisionTreeClassifier,0.6361746361746362,0.47619047619047616
+5,False,all,depression,t-SNE,RandomForestClassifier,1.0,0.717948717948718
+5,False,all,depression,t-SNE,SVC,0.6794871794871795,0.5299145299145299
+5,False,all,depression,t-SNE,LinearSVC,0.6179966044142615,0.5299145299145299
+5,False,all,depression,t-SNE,GaussianNB,0.5,0.3125
+5,False,all,depression,t-SNE,GradientBoostingClassifier,1.0,0.717948717948718
+5,False,all,depression,t-SNE,HistGradientBoostingClassifier,0.40476190476190477,0.3125
+5,False,all,depression,SMOTE,LogisticRegression,1.0,0.26666666666666666
+5,False,all,depression,SMOTE,KNeighborsClassifier,1.0,0.3418803418803419
+5,False,all,depression,SMOTE,DecisionTreeClassifier,1.0,0.47619047619047616
+5,False,all,depression,SMOTE,RandomForestClassifier,1.0,0.3418803418803419
+5,False,all,depression,SMOTE,SVC,0.5968379446640316,0.35294117647058826
+5,False,all,depression,SMOTE,LinearSVC,1.0,0.26666666666666666
+5,False,all,depression,SMOTE,GaussianNB,0.9705627705627706,0.6071428571428572
+5,False,all,depression,SMOTE,GradientBoostingClassifier,1.0,0.47619047619047616
+5,False,all,depression,SMOTE,HistGradientBoostingClassifier,0.3333333333333333,0.3125
+5,False,all,depression,Pass,LogisticRegression,1.0,0.26666666666666666
+5,False,all,depression,Pass,KNeighborsClassifier,1.0,0.45
+5,False,all,depression,Pass,DecisionTreeClassifier,0.9554367201426025,0.7272727272727273
+5,False,all,depression,Pass,RandomForestClassifier,1.0,0.3125
+5,False,all,depression,Pass,SVC,0.3633276740237691,0.35294117647058826
+5,False,all,depression,Pass,LinearSVC,1.0,0.26666666666666666
+5,False,all,depression,Pass,GaussianNB,0.9523809523809523,0.5299145299145299
+5,False,all,depression,Pass,GradientBoostingClassifier,1.0,0.7272727272727273
+5,False,all,depression,Pass,HistGradientBoostingClassifier,0.40476190476190477,0.3125
+5,False,all,anxiety,selection feature,LogisticRegression,0.7596153846153846,0.905982905982906
+5,False,all,anxiety,selection feature,KNeighborsClassifier,1.0,0.7272727272727273
+5,False,all,anxiety,selection feature,DecisionTreeClassifier,0.9166666666666667,0.6333333333333333
+5,False,all,anxiety,selection feature,RandomForestClassifier,1.0,0.6333333333333333
+5,False,all,anxiety,selection feature,SVC,0.6179966044142615,0.6857142857142857
+5,False,all,anxiety,selection feature,LinearSVC,0.7987117552334944,0.8166666666666667
+5,False,all,anxiety,selection feature,GaussianNB,0.9188311688311688,0.8035714285714286
+5,False,all,anxiety,selection feature,GradientBoostingClassifier,1.0,0.7272727272727273
+5,False,all,anxiety,selection feature,HistGradientBoostingClassifier,0.358974358974359,0.3125
+5,False,all,anxiety,PCA,LogisticRegression,1.0,0.45
+5,False,all,anxiety,PCA,KNeighborsClassifier,1.0,0.6333333333333333
+5,False,all,anxiety,PCA,DecisionTreeClassifier,0.8397435897435898,0.4107142857142857
+5,False,all,anxiety,PCA,RandomForestClassifier,1.0,0.5454545454545454
+5,False,all,anxiety,PCA,SVC,0.7987117552334944,0.3418803418803419
+5,False,all,anxiety,PCA,LinearSVC,1.0,0.5299145299145299
+5,False,all,anxiety,PCA,GaussianNB,0.7987117552334944,0.26666666666666666
+5,False,all,anxiety,PCA,GradientBoostingClassifier,1.0,0.4107142857142857
+5,False,all,anxiety,PCA,HistGradientBoostingClassifier,0.358974358974359,0.3125
+5,False,all,anxiety,t-SNE,LogisticRegression,0.5993589743589745,0.6071428571428572
+5,False,all,anxiety,t-SNE,KNeighborsClassifier,1.0,0.8166666666666667
+5,False,all,anxiety,t-SNE,DecisionTreeClassifier,0.8376623376623377,0.8166666666666667
+5,False,all,anxiety,t-SNE,RandomForestClassifier,1.0,0.717948717948718
+5,False,all,anxiety,t-SNE,SVC,0.7947454844006567,0.7272727272727273
+5,False,all,anxiety,t-SNE,LinearSVC,0.5993589743589745,0.6071428571428572
+5,False,all,anxiety,t-SNE,GaussianNB,0.6179966044142615,0.6071428571428572
+5,False,all,anxiety,t-SNE,GradientBoostingClassifier,1.0,0.45
+5,False,all,anxiety,t-SNE,HistGradientBoostingClassifier,0.358974358974359,0.3125
+5,False,all,anxiety,SMOTE,LogisticRegression,1.0,0.26666666666666666
+5,False,all,anxiety,SMOTE,KNeighborsClassifier,1.0,0.5454545454545454
+5,False,all,anxiety,SMOTE,DecisionTreeClassifier,0.9282051282051282,0.3125
+5,False,all,anxiety,SMOTE,RandomForestClassifier,1.0,0.45
+5,False,all,anxiety,SMOTE,SVC,0.475,0.35294117647058826
+5,False,all,anxiety,SMOTE,LinearSVC,1.0,0.15384615384615385
+5,False,all,anxiety,SMOTE,GaussianNB,1.0,0.45
+5,False,all,anxiety,SMOTE,GradientBoostingClassifier,1.0,0.6333333333333333
+5,False,all,anxiety,SMOTE,HistGradientBoostingClassifier,0.3333333333333333,0.35294117647058826
+5,False,all,anxiety,Pass,LogisticRegression,1.0,0.3418803418803419
+5,False,all,anxiety,Pass,KNeighborsClassifier,1.0,0.6333333333333333
+5,False,all,anxiety,Pass,DecisionTreeClassifier,1.0,0.3125
+5,False,all,anxiety,Pass,RandomForestClassifier,1.0,0.5299145299145299
+5,False,all,anxiety,Pass,SVC,0.4485294117647059,0.35294117647058826
+5,False,all,anxiety,Pass,LinearSVC,1.0,0.26666666666666666
+5,False,all,anxiety,Pass,GaussianNB,1.0,0.45
+5,False,all,anxiety,Pass,GradientBoostingClassifier,1.0,0.3125
+5,False,all,anxiety,Pass,HistGradientBoostingClassifier,0.358974358974359,0.3125
