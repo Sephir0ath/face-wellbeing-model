@@ -1,30 +1,30 @@
 import pandas as pd
 
 
-def main(question: int, label: str, mode: str):
+def main(label: str = "depression", mode: str = "Pass"):
     data = pd.read_csv("data.csv")
     data_1 = data[
-        (data["question"] == question)
+        (data["question"] == 1)
         & (data["label"] == label)
         & (data["mode"] == mode)
     ]
     data_2 = data[
-        (data["question"] == question)
+        (data["question"] == 2)
         & (data["label"] == label)
         & (data["mode"] == mode)
     ]
     data_3 = data[
-        (data["question"] == question)
+        (data["question"] == 3)
         & (data["label"] == label)
         & (data["mode"] == mode)
     ]
     data_4 = data[
-        (data["question"] == question)
+        (data["question"] == 4)
         & (data["label"] == label)
         & (data["mode"] == mode)
     ]
     data_5 = data[
-        (data["question"] == question)
+        (data["question"] == 5)
         & (data["label"] == label)
         & (data["mode"] == mode)
     ]
