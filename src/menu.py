@@ -13,6 +13,7 @@ from sklearn.naive_bayes import GaussianNB
 
 from tensorflow.keras.layers import LSTM
 
+
 def select_question() -> int:
     questions = [str(i + 1) for i in range(5)]
 
@@ -67,7 +68,7 @@ def select_label() -> str:
 
 
 def select_model(temporality: bool = False):
-    if not temporality: 
+    if not temporality:
         models = [
             "all",
             "LogisticRegression",
@@ -93,12 +94,12 @@ def select_model(temporality: bool = False):
             "GradientBoostingClassifier": GradientBoostingClassifier,
             "HistGradientBoostingClassifier": HistGradientBoostingClassifier,
         }
-    else: 
-        models = ["LSTM",]
-        
-        models_dict = {
-            "LSTM": LSTM
-            }
+    else:
+        models = [
+            "LSTM",
+        ]
+
+        models_dict = {"LSTM": LSTM}
 
     response = select("Select model:", choices=models).ask()
     response = models_dict[response]

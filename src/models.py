@@ -61,8 +61,10 @@ class Models:
     def f1_scores_macro(self, y_predict: dict, y_test: pd.Series) -> dict:
         f1_score_result = {}
         for y_val in y_predict:
-            f1_score_result[y_val] = f1_score(y_test, y_predict[y_val], average="weighted")
-        return f1_score_result  
+            f1_score_result[y_val] = f1_score(
+                y_test, y_predict[y_val], average="weighted"
+            )
+        return f1_score_result
 
     def parameter_tuning(self, name: str) -> dict:
         if name == "LogisticRegression":
@@ -152,12 +154,17 @@ class Models:
         return y_predict
 
     def fit_and_predict_deep_learning(
-            self, X_train: pd.DataFrame, y_train: pd.Series, X_test: pd.DataFrame, y_test: pd.Series, model
+        self,
+        X_train: pd.DataFrame,
+        y_train: pd.Series,
+        X_test: pd.DataFrame,
+        y_test: pd.Series,
+        model,
     ) -> tuple[dict, np.array]:
         from tensorflow.keras.models import Sequential
         from tensorflow.keras.layers import LSTM, Dense
         from tensorflow.keras.initializers import GlorotUniform
-        
+
         y_predict = {}
         time_steps = 10
 
@@ -172,12 +179,14 @@ class Models:
         # In depression case is more importat 1 that 0, because exist imbalance
         print("Distribución en y_train:", y_train.value_counts(), end="\n")
         print("Distribución en y_test:", y_test.value_counts(), end="\n")
-        print("Distribución en y_train_seq:", np.unique(y_train_seq, return_counts=True), end="\n")
-        
+        print(
+            "Distribución en y_train_seq:",
+            np.unique(y_train_seq, return_counts=True),
+            end="\n",
+        )
+
         class_weights = compute_class_weight(
-            'balanced',
-            classes=np.unique(y_train_seq),
-            y=y_train_seq
+            "balanced", classes=np.unique(y_train_seq), y=y_train_seq
         )
         class_weight = {0: class_weights[0], 1: class_weights[1]}
         print("Class weights:", class_weight, end="\n")
@@ -191,26 +200,33 @@ class Models:
                 activation="tanh",
                 return_sequences=False,
                 input_shape=(time_steps, X_train_seq.shape[2]),
-                kernel_initializer=GlorotUniform(seed=42)
+                kernel_initializer=GlorotUniform(seed=42),
             )
         )
-        
+
         # binary classifier
-        model.add(Dense(32, activation="relu", kernel_initializer=GlorotUniform(seed=42)))
-        model.add(Dense(1, activation="sigmoid", kernel_initializer=GlorotUniform(seed=42)))  
+        model.add(
+            Dense(32, activation="relu", kernel_initializer=GlorotUniform(seed=42))
+        )
+        model.add(
+            Dense(1, activation="sigmoid", kernel_initializer=GlorotUniform(seed=42))
+        )
 
         # optimizer: adam is the most popular
         # loss: is the error measure, i use binary_crossentropy because we have binary classification
         # metrics: show numbers to understand performance
-        model.compile(optimizer="adam", loss="binary_crossentropy", metrics=["accuracy"])
+        model.compile(
+            optimizer="adam", loss="binary_crossentropy", metrics=["accuracy"]
+        )
 
         # epoch: how many times the models sees the full dataset. More epoch -> more learning
         model.fit(
-            X_train_seq, y_train_seq,
+            X_train_seq,
+            y_train_seq,
             epochs=10,
             batch_size=32,
             validation_split=0.3,
-            class_weight=class_weight
+            class_weight=class_weight,
         )
 
         y_predict_base = model.predict(X_test_seq)
@@ -238,7 +254,7 @@ class Models:
         y_seq = []
 
         for i in range(time_steps, len(X)):
-            X_seq.append(X[i - time_steps:i].values)
+            X_seq.append(X[i - time_steps : i].values)
             y_seq.append(y[i])
 
         return np.array(X_seq), np.array(y_seq)
