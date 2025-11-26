@@ -5,3 +5,4 @@
  pandas>=2.3.0
  imblearn>=0.0
  questionary>=2.1.1
+ tensorflow>=2.20.0

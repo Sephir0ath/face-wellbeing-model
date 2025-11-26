@@ -9,8 +9,10 @@ from src.graph import *
 
 from sklearn.model_selection import train_test_split
 from sklearn.exceptions import ConvergenceWarning
+from sklearn.preprocessing import StandardScaler
 
 import pandas as pd
+import numpy as np
 import warnings
 import argparse
 
@@ -52,17 +54,22 @@ def return_mode(
     return X, y
 
 
-def extract_data() -> tuple[pd.DataFrame, str | list]:
+def extract_data() -> tuple[pd.DataFrame, str | list, bool]:
     extract = DataExtractor()
 
     question = select_question()
     temporality = select_temporality()
-    feature = select_feature(temporary=temporality)
+    
+    if not temporality: feature = select_feature(temporary=temporality)
+    else: feature = ""
+
     label = select_label()
 
-    return extract.extract_csv(
+    dataframe, labels_name = extract.extract_csv(
         temporality=temporality, question=question, feature=feature, labels=label
     )
+
+    return dataframe, labels_name, temporality
 
 
 def extract_data_with_arguments(
@@ -85,7 +92,7 @@ def extract_dataframes_and_series(
 
 
 def config_data(
-    X: pd.DataFrame, y: pd.Series
+    X: pd.DataFrame, y: pd.Series, temporality: bool
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
     mode = select_mode()
 
@@ -93,9 +100,15 @@ def config_data(
     if mode != "SMOTE" and mode is not None:
         X, y = return_mode(mode, X, y)
 
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.3, random_state=42
-    )
+    if temporality: 
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=0.3, shuffle=False, random_state=42
+        )
+    else:
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=0.3, random_state=42
+        )
+
 
     # Over Sampling
     if mode == "SMOTE":
@@ -125,7 +138,7 @@ def config_data_with_arguments(
 
 def execute_model(
     X_train: pd.DataFrame, X_test: pd.DataFrame, y_train: pd.Series, y_test: pd.Series
-) -> tuple[pd.Series, dict]:
+) -> tuple[dict, dict]:
     # Create model
     model = Models()
     model_selected = select_model()
@@ -144,6 +157,29 @@ def execute_model(
     f1_score_result = model.f1_scores_macro(y_predict, y_test)
 
     return y_predict, f1_score_result
+
+def execute_deep_learning_model(
+    X_train: pd.DataFrame, X_test: pd.DataFrame, y_train: pd.Series, y_test: pd.Series
+) -> tuple[dict, dict, np.array]:
+    # Create model
+    model = Models()
+    model_selected = select_model(temporality=True)
+
+    # MultiModel or Single Model
+    if not model_selected:
+        # No implemented
+        y_predict = model.fit_and_predict_models(
+            X_train=X_train, y_train=y_train, X_test=X_test
+        )
+    else:
+        y_predict, y_test_seq = model.fit_and_predict_deep_learning(
+            X_train=X_train, y_train=y_train, X_test=X_test, y_test=y_test, model=model_selected
+        )
+
+        # F1 SCORE
+        f1_score_result = model.f1_scores_macro(y_predict, y_test_seq)
+
+    return y_predict, f1_score_result, y_test_seq
 
 
 def execute_model_with_arguments(
@@ -186,7 +222,7 @@ def sorted_dict(f1_scores: dict) -> dict:
 
 def testing_models():
     # Extract csv data for temporality, question and feature
-    dataframe, label_names = extract_data()
+    dataframe, label_names, temporality = extract_data()
 
     # Split X, X_id and y
     X, X_id, y = extract_dataframes_and_series(
@@ -194,12 +230,15 @@ def testing_models():
     )
 
     # Split train data and test data
-    X_train, X_test, y_train, y_test = config_data(X=X, y=y)
+    X_train, X_test, y_train, y_test = config_data(X=X, y=y, temporality=temporality)
 
     # Execute model
-    y_predict, f1_score_results = execute_model(
-        X_train=X_train, X_test=X_test, y_train=y_train, y_test=y_test
-    )
+    if temporality: 
+        y_predict, f1_score_results, y_test_seq = execute_deep_learning_model(X_train=X_train, X_test=X_test, y_train=y_train, y_test=y_test)
+    else:
+        y_predict, f1_score_results = execute_model(
+            X_train=X_train, X_test=X_test, y_train=y_train, y_test=y_test
+        )
 
     # Sort dictionary
     f1_score_results = sorted_dict(f1_scores=f1_score_results)
@@ -211,9 +250,14 @@ def testing_models():
     input("Press [ENTER] to view the confusion matrix... ")
 
     for model in y_predict:
-        view_confusion_matrix(
-            y_pred=y_predict[model], y_test=y_test, label=label_names, model_name=model
-        )
+        if not temporality: 
+            view_confusion_matrix(
+                y_pred=y_predict[model], y_test=y_test, label=label_names, model_name=model
+            )
+        else: 
+            view_confusion_matrix(
+                y_pred=y_predict[model], y_test=y_test_seq, label=label_names, model_name=model
+            )
 
 
 def testing_models_with_arguments(args):
