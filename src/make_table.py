@@ -22,10 +22,13 @@ def main(label: str = "depression", mode: str = "Pass"):
 
     my_list = [data_1, data_2, data_3, data_4, data_5]
 
+    count = 1
     for df in my_list:
         df = df[["model", "f1_train", "f1_test"]]
         df = df.sort_values(by="f1_test", ascending=True)
-        print(df.head(9), end="\n\n")
+        print("-"*20 + f" {count} QUESTION " + "-"*20)
+        print(df.head(9), end="\n\n\n")
+        count += 1
 
 
 if __name__ == "__main__":
