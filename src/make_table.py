@@ -1,32 +1,23 @@
 import pandas as pd
+import argparse
 
 
 def main(label: str = "depression", mode: str = "Pass"):
     data = pd.read_csv("data.csv")
     data_1 = data[
-        (data["question"] == 1)
-        & (data["label"] == label)
-        & (data["mode"] == mode)
+        (data["question"] == 1) & (data["label"] == label) & (data["mode"] == mode)
     ]
     data_2 = data[
-        (data["question"] == 2)
-        & (data["label"] == label)
-        & (data["mode"] == mode)
+        (data["question"] == 2) & (data["label"] == label) & (data["mode"] == mode)
     ]
     data_3 = data[
-        (data["question"] == 3)
-        & (data["label"] == label)
-        & (data["mode"] == mode)
+        (data["question"] == 3) & (data["label"] == label) & (data["mode"] == mode)
     ]
     data_4 = data[
-        (data["question"] == 4)
-        & (data["label"] == label)
-        & (data["mode"] == mode)
+        (data["question"] == 4) & (data["label"] == label) & (data["mode"] == mode)
     ]
     data_5 = data[
-        (data["question"] == 5)
-        & (data["label"] == label)
-        & (data["mode"] == mode)
+        (data["question"] == 5) & (data["label"] == label) & (data["mode"] == mode)
     ]
 
     my_list = [data_1, data_2, data_3, data_4, data_5]
@@ -38,4 +29,15 @@ def main(label: str = "depression", mode: str = "Pass"):
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("--label", type=str, help="Label deseada")
+    parser.add_argument("--mode", type=str, help="Pass, PCA, t-SNE, selection feature")
+    args = parser.parse_args()
+
+    if args.label == "depression" or args.label == "anxiety":
+        main(label=args.label, mode=args.mode)
+    else:
+        print(
+            "The labels are depression or anxiety \n The modes are PCA, t-SNE, selection feature and Pass"
+        )
