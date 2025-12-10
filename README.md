@@ -58,3 +58,36 @@ python3 main.py
 # Example 
 python3 main.py --question 1 --feature "All features" --label "anxiety" --temporality "False" --mode "PCA"
 ```
+
+## ⏺️ | Structure
+
+>[!IMPORTANT]
+>The project structure should always be like this.
+
+```sh
+├───data
+│   ├───Person1
+│   │   ├───audio_features
+│   │   ├───facial_features
+│   │   ├───facial_features_1s_avg
+│   │   ├───facial_features_avg
+│   │   ├───facial_features_stats
+│   │   └───transcripts_embeddings
+│   ├───Person2
+│   ├───...
+│   └───labels.csv
+├───src
+│   ├───__init__.py
+│   ├───data_extractor.py
+│   ├───dimensionality_reduction.py
+│   ├───feature_selection.py
+│   ├───graph.py
+│   ├───make_table.py
+│   ├───manu.py
+│   ├───models.py
+│   ├───smote.py
+│   └───structure.py
+├───main.py
+├───requirements.py
+└───README.md
+```
