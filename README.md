@@ -19,7 +19,7 @@
 ## **Technologies used**
 
 <a href="https://skillicons.dev">
-  <img src="https://skillicons.dev/icons?i=git,github,vscode&perline=5" />
+  <img src="https://skillicons.dev/icons?i=git,github,vscode,neovim&perline=5" />
 </a>
 
 ## **Programming languages and dependences**
