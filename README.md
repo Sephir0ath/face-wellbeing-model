@@ -10,7 +10,7 @@
 |------|--------|
 |Juan Felipe Raysz Muñoz|[@Sephir0ath](https://github.com/Sephir0ath)|
 |Gabriela Antonia Muñoz Castillo|[@Nodercif](https://github.com/Nodercif)|
-|Francisca Isidora Núñez Larenas|[@sshiro0](https://github.com/sshiro0)|
+|Manuel Isaac Núñez Larenas|[@sshiro0](https://github.com/sshiro0)|
 |Javier Alejandro Campos Contreras|[@4lehh](https://github.com/4lehh)|
 |Oliver Isaías Peñailillo Sanzana|[@pyrrss](https://github.com/pyrrss)|
 
