@@ -1,20 +1,26 @@
-from sklearn.metrics import f1_score
+from __future__ import annotations
 
-from sklearn.model_selection import train_test_split
-from sklearn.utils.class_weight import compute_class_weight
-import pandas as pd
 import numpy as np
+import pandas as pd
 
-from sklearn.linear_model import LogisticRegression
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.base import clone
+from sklearn.metrics import f1_score
+from sklearn.utils.class_weight import compute_class_weight
+
 from sklearn.ensemble import (
-    RandomForestClassifier,
-    HistGradientBoostingClassifier,
     GradientBoostingClassifier,
+    HistGradientBoostingClassifier,
+    RandomForestClassifier,
 )
-from sklearn.svm import SVC, LinearSVC
+from sklearn.impute import SimpleImputer
+from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import LinearSVC, SVC
+from sklearn.tree import DecisionTreeClassifier
+
 
 MODELS = [
     LogisticRegression,
@@ -30,8 +36,29 @@ MODELS = [
 
 
 class Models:
-    def __init__(self, arguments: bool = None):
+    def __init__(self, arguments: bool | None = None):
         self.arguments = arguments
+
+    def _build_pipeline(self, model_instance, mode_step=None) -> Pipeline:
+        """Se construye sklearn Pipeline.
+
+        mode_step: (name, transformer) como ("select", SelectKBest(...))
+                  o ("pca", PCA(...)). 
+                  
+        """
+
+        # NOTE: ahora mismo para todos los modelos de ML clásicos se está aplicando imputación y escalado.
+        steps: list[tuple[str, object]] = [
+            ("imputer", SimpleImputer(strategy="median")),
+            ("scaler", StandardScaler()),
+        ]
+
+        if mode_step is not None:
+            name, transformer = mode_step
+            steps.append((name, clone(transformer)))
+
+        steps.append(("clf", model_instance))
+        return Pipeline(steps=steps)
 
     def fit_and_predict_models(
         self,
@@ -39,120 +66,108 @@ class Models:
         y_train: pd.Series,
         X_test: pd.DataFrame,
         models: list = MODELS,
+        mode_step=None,
     ) -> dict:
-
         if not self.arguments:
             print("Model training and predictions... \n\n")
-        predict = {}
 
+        predict: dict[str, np.ndarray] = {}
         for model in models:
             name = model.__name__
-
             tuning = self.parameter_tuning(name)
-
-            # Add model with tuned parameters
             model_instance = model(**tuning)
 
-            model_instance.fit(X_train, y_train)
-            predict[name] = model_instance.predict(X_test)
+            pipeline = self._build_pipeline(model_instance=model_instance, mode_step=mode_step)
+            pipeline.fit(X_train, y_train)
+            predict[name] = pipeline.predict(X_test)
 
         return predict
 
+    def fit_and_predict_single_model(
+        self,
+        X_train: pd.DataFrame,
+        y_train: pd.Series,
+        X_test: pd.DataFrame,
+        model,
+        mode_step=None,
+    ) -> dict:
+        name = model.__name__
+        tuning = self.parameter_tuning(name)
+        model_instance = model(**tuning)
+
+        pipeline = self._build_pipeline(model_instance=model_instance, mode_step=mode_step)
+        pipeline.fit(X_train, y_train)
+        return {name: pipeline.predict(X_test)}
+
     def f1_scores_macro(self, y_predict: dict, y_test: pd.Series) -> dict:
-        f1_score_result = {}
-        for y_val in y_predict:
-            f1_score_result[y_val] = f1_score(
-                y_test, y_predict[y_val], average="weighted"
-            )
-        return f1_score_result
+        # Keep this name for compatibility; we report macro-F1.
+        return {
+            model_name: f1_score(y_test, y_pred, average="macro", zero_division=0)
+            for model_name, y_pred in y_predict.items()
+        }
+
+    def f1_scores_binary(self, y_predict: dict, y_test: pd.Series) -> dict:
+        return {
+            model_name: f1_score(y_test, y_pred, average="binary", zero_division=0)
+            for model_name, y_pred in y_predict.items()
+        }
 
     def parameter_tuning(self, name: str) -> dict:
         if name == "LogisticRegression":
-            tuning = {
+            return {
                 "C": 1.0,
                 "max_iter": 5000,
                 "class_weight": "balanced",
                 "random_state": 42,
             }
-
-        elif name == "KNeighborsClassifier":
-            tuning = {"n_neighbors": 5, "weights": "distance"}
-
-        elif name == "DecisionTreeClassifier":
-            tuning = {"max_depth": 6, "min_samples_split": 10, "random_state": 42}
-
-        elif name == "RandomForestClassifier":
-            tuning = {
+        if name == "KNeighborsClassifier":
+            return {"n_neighbors": 5, "weights": "distance"}
+        if name == "DecisionTreeClassifier":
+            return {"max_depth": 6, "min_samples_split": 10, "random_state": 42}
+        if name == "RandomForestClassifier":
+            return {
                 "n_estimators": 200,
                 "max_depth": 8,
                 "class_weight": "balanced",
                 "random_state": 42,
             }
-
-        elif name == "SVC":
-            tuning = {
+        if name == "SVC":
+            return {
                 "C": 1.0,
                 "kernel": "rbf",
                 "class_weight": "balanced",
                 "probability": True,
                 "random_state": 42,
             }
-
-        elif name == "LinearSVC":
-            tuning = {
+        if name == "LinearSVC":
+            return {
                 "C": 0.5,
                 "class_weight": "balanced",
                 "max_iter": 5000,
                 "random_state": 42,
             }
-
-        elif name == "GaussianNB":
-            tuning = {"var_smoothing": 1e-9}
-
-        elif name == "GradientBoostingClassifier":
-            tuning = {
+        if name == "GaussianNB":
+            return {"var_smoothing": 1e-9}
+        if name == "GradientBoostingClassifier":
+            return {
                 "n_estimators": 150,
                 "learning_rate": 0.1,
                 "max_depth": 3,
                 "random_state": 42,
             }
-
-        elif name == "XGBClassifier":
-            tuning = {
-                "n_estimators": 200,
-                "learning_rate": 0.1,
-                "max_depth": 5,
-                "subsample": 0.8,
-                "colsample_bytree": 0.8,
-                "random_state": 42,
-                "eval_metric": "logloss",
-            }
-        elif name == "HistGradientBoostingClassifier":
-            tuning = {
+        if name == "HistGradientBoostingClassifier":
+            return {
                 "max_iter": 5000,
                 "learning_rate": 0.1,
                 "max_depth": None,
                 "random_state": 42,
             }
-        else:
-            raise ValueError("Model not recognized for parameter tuning.")
 
-        return tuning
+        raise ValueError("Model not recognized for parameter tuning.")
 
-    def fit_and_predict_single_model(
-        self, X_train: pd.DataFrame, y_train: pd.Series, X_test: pd.DataFrame, model
-    ) -> dict:
-        y_predict = {}
-
-        name = model.__name__
-        tuning = self.parameter_tuning(name)
-
-        model_instance = model(**tuning)
-        model_instance.fit(X_train, y_train)
-        y_predict[name] = model_instance.predict(X_test)
-
-        return y_predict
-
+    # -----------------------------
+    # Deep learning (temporality=True)
+    # -----------------------------
     def fit_and_predict_deep_learning(
         self,
         X_train: pd.DataFrame,
@@ -160,12 +175,15 @@ class Models:
         X_test: pd.DataFrame,
         y_test: pd.Series,
         model,
-    ) -> tuple[dict, np.array]:
-        from tensorflow.keras.models import Sequential
-        from tensorflow.keras.layers import LSTM, Dense
-        from tensorflow.keras.initializers import GlorotUniform
+    ) -> tuple[dict, np.ndarray]:
+        """Train an LSTM on sliding windows and return predictions + aligned y_test."""
 
-        y_predict = {}
+        # Local imports: tensorflow is optional for most workflows
+        from tensorflow.keras.initializers import GlorotUniform
+        from tensorflow.keras.layers import Dense, LSTM
+        from tensorflow.keras.models import Sequential
+
+        y_predict: dict[str, np.ndarray] = {}
         time_steps = 10
 
         X_train = X_train.reset_index(drop=True)
@@ -176,25 +194,16 @@ class Models:
         X_train_seq, y_train_seq = self.create_sequences(X_train, y_train, time_steps)
         X_test_seq, y_test_seq = self.create_sequences(X_test, y_test, time_steps)
 
-        # In depression case is more importat 1 that 0, because exist imbalance
-        print("Distribución en y_train:", y_train.value_counts(), end="\n")
-        print("Distribución en y_test:", y_test.value_counts(), end="\n")
-        print(
-            "Distribución en y_train_seq:",
-            np.unique(y_train_seq, return_counts=True),
-            end="\n",
-        )
-
         class_weights = compute_class_weight(
-            "balanced", classes=np.unique(y_train_seq), y=y_train_seq
+            class_weight="balanced",
+            classes=np.unique(y_train_seq),
+            y=y_train_seq,
         )
         class_weight = {0: class_weights[0], 1: class_weights[1]}
-        print("Class weights:", class_weight, end="\n")
 
-        model = Sequential()
+        net = Sequential()
         name = "LSTM"
-
-        model.add(
+        net.add(
             LSTM(
                 64,
                 activation="tanh",
@@ -203,58 +212,32 @@ class Models:
                 kernel_initializer=GlorotUniform(seed=42),
             )
         )
+        net.add(Dense(32, activation="relu", kernel_initializer=GlorotUniform(seed=42)))
+        net.add(Dense(1, activation="sigmoid", kernel_initializer=GlorotUniform(seed=42)))
+        net.compile(optimizer="adam", loss="binary_crossentropy", metrics=["accuracy"])
 
-        # binary classifier
-        model.add(
-            Dense(32, activation="relu", kernel_initializer=GlorotUniform(seed=42))
-        )
-        model.add(
-            Dense(1, activation="sigmoid", kernel_initializer=GlorotUniform(seed=42))
-        )
-
-        # optimizer: adam is the most popular
-        # loss: is the error measure, i use binary_crossentropy because we have binary classification
-        # metrics: show numbers to understand performance
-        model.compile(
-            optimizer="adam", loss="binary_crossentropy", metrics=["accuracy"]
-        )
-
-        # epoch: how many times the models sees the full dataset. More epoch -> more learning
-        model.fit(
+        net.fit(
             X_train_seq,
             y_train_seq,
             epochs=10,
             batch_size=32,
             validation_split=0.3,
             class_weight=class_weight,
+            verbose=0,
         )
 
-        y_predict_base = model.predict(X_test_seq)
-
-        print("=== ANÁLISIS DE PREDICCIONES ===")
-        print(f"Valores mínimos: {y_predict_base.min()}")
-        print(f"Valores máximos: {y_predict_base.max()}")
-        print(f"Media: {y_predict_base.mean()}")
-        print(f"Distribución:")
-        print(f"  < 0.1: {np.sum(y_predict_base < 0.1)}")
-        print(f"0.1-0.5: {np.sum((y_predict_base >= 0.1) & (y_predict_base < 0.5))}")
-        print(f"0.5-0.9: {np.sum((y_predict_base >= 0.5) & (y_predict_base < 0.9))}")
-        print(f"  > 0.9: {np.sum(y_predict_base >= 0.9)}")
-
-        # Ver las primeras 10 predicciones
-        print("Primeras 10 predicciones raw:")
-        print(y_predict_base[:10].flatten())
-
+        y_predict_base = net.predict(X_test_seq, verbose=0)
         y_predict[name] = (y_predict_base > 0.5).astype(int)
-
         return y_predict, y_test_seq
 
-    def create_sequences(self, X: pd.DataFrame, y: pd.Series, time_steps=10):
-        X_seq = []
-        y_seq = []
+    def create_sequences(
+        self, X: pd.DataFrame, y: pd.Series, time_steps: int = 10
+    ) -> tuple[np.ndarray, np.ndarray]:
+        X_seq: list[np.ndarray] = []
+        y_seq: list[int] = []
 
         for i in range(time_steps, len(X)):
             X_seq.append(X[i - time_steps : i].values)
-            y_seq.append(y[i])
+            y_seq.append(int(y[i]))
 
         return np.array(X_seq), np.array(y_seq)
