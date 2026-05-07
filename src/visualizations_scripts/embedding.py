@@ -17,6 +17,14 @@ import umap
 
 from ..data_extractor import DataExtractor
 
+""""
+Ejemplo ejecución:
+    python -m src.visualizations_scripts.embedding --method pca --components 2 --question 4 --label depression
+
+"""
+
+
+
 ROOT_DIR = Path(__file__).resolve().parents[2]
 FONT_PATH = ROOT_DIR / "fonts" / "DM_Sans.ttf"
 fm.fontManager.addfont(FONT_PATH)
@@ -124,7 +132,7 @@ def plot_embedding(
         ax.set_xlabel("Dim 1")
         ax.set_ylabel(label)
 
-    ax.set_title(f"{question_name} – {method.upper()} ({label})", fontfamily=FONT_NAME)
+    # ax.set_title(f"{question_name} – {method.upper()} ({label})", fontfamily=FONT_NAME)
     ax.legend(title=label, loc="upper right")
     fig.tight_layout()
     fig.savefig(output, dpi=200)

@@ -1,6 +1,7 @@
-from sklearn.metrics import f1_score
+from __future__ import annotations
 
-from sklearn.model_selection import train_test_split
+from sklearn.metrics import f1_score
+from sklearn.base import clone
 import pandas as pd
 
 from sklearn.linear_model import LogisticRegression
@@ -13,6 +14,10 @@ from sklearn.ensemble import (
 )
 from sklearn.svm import SVC, LinearSVC
 from sklearn.naive_bayes import GaussianNB
+
+from sklearn.impute import SimpleImputer
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
 
 MODELS = [
     LogisticRegression,
@@ -31,12 +36,34 @@ class Models:
     def __init__(self):
         pass
 
+    def _build_pipeline(self, model_instance, mode_step=None) -> Pipeline:
+        """se crea un Pipeline de sklearn
+
+            mode_step: (name, transformer). ej: ("select", SelectKBest(...))
+                                                ("pca", PCA(...))
+        """
+        steps: list[tuple[str, object]] = [
+            ("imputer", SimpleImputer(strategy="median")),
+            ("scaler", StandardScaler()),
+        ]
+        
+        # se agrega el mode_step al pipeline (SelectKBest, PCA, ...)
+        if mode_step is not None:
+            name, transformer = mode_step
+            steps.append((name, clone(transformer)))
+        
+        # se agrega clasificador (modelo) al pipeline
+        steps.append(("clf", model_instance))
+        
+        return Pipeline(steps=steps)
+
     def fit_and_predict_models(
         self,
         X_train: pd.DataFrame,
         y_train: pd.Series,
         X_test: pd.DataFrame,
         models: list = MODELS,
+        mode_step=None,
     ) -> dict:
         print("Model training and predictions... \n\n")
         predict = {}
@@ -49,8 +76,9 @@ class Models:
             # Add model with tuned parameters
             model_instance = model(**tuning)
 
-            model_instance.fit(X_train, y_train)
-            predict[name] = model_instance.predict(X_test)
+            pipeline = self._build_pipeline(model_instance=model_instance, mode_step=mode_step)
+            pipeline.fit(X_train, y_train)
+            predict[name] = pipeline.predict(X_test)
 
         return predict
 
@@ -58,6 +86,12 @@ class Models:
         f1_score_result = {}
         for y_val in y_predict:
             f1_score_result[y_val] = f1_score(y_test, y_predict[y_val], average="macro")
+        return f1_score_result
+
+    def f1_scores_binary(self, y_predict: dict, y_test: pd.Series) -> dict:
+        f1_score_result = {}
+        for y_val in y_predict:
+            f1_score_result[y_val] = f1_score(y_test, y_predict[y_val], average="binary", zero_division=0)
         return f1_score_result
 
     def parameter_tuning(self, name: str) -> dict:
@@ -134,7 +168,12 @@ class Models:
         return tuning
 
     def fit_and_predict_single_model(
-        self, X_train: pd.DataFrame, y_train: pd.Series, X_test: pd.DataFrame, model
+        self,
+        X_train: pd.DataFrame,
+        y_train: pd.Series,
+        X_test: pd.DataFrame,
+        model,
+        mode_step=None,
     ) -> dict:
         y_predict = {}
 
@@ -142,7 +181,9 @@ class Models:
         tuning = self.parameter_tuning(name)
 
         model_instance = model(**tuning)
-        model_instance.fit(X_train, y_train)
-        y_predict[name] = model_instance.predict(X_test)
+
+        pipeline = self._build_pipeline(model_instance=model_instance, mode_step=mode_step)
+        pipeline.fit(X_train, y_train)
+        y_predict[name] = pipeline.predict(X_test)
 
         return y_predict
