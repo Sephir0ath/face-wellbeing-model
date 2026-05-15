@@ -69,7 +69,8 @@ class Models:
         mode_step=None,
     ) -> dict:
         if not self.arguments:
-            print("Model training and predictions... \n\n")
+            pass
+            # print("Model training and predictions... \n\n")
 
         predict: dict[str, np.ndarray] = {}
         for model in models:

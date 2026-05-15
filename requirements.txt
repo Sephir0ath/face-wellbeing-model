@@ -1,19 +1,9 @@
-<<<<<<< HEAD
- numpy>=2.3.3
- scikit-learn>=1.7.2
- matplotlib>=3.10.7
- seaborn>=0.13.2
- pandas>=2.3.0
- imblearn>=0.0
- questionary>=2.1.1
- tensorflow>=2.20.0
-=======
- numpy>=2.3.3
- scikit-learn>=1.7.2
- matplotlib>=3.10.7
- seaborn>=0.13.2
- pandas>=2.3.0
- imblearn>=0.0
- questionary>=2.1.1
- umap-learn>=0.5.5
->>>>>>> e5f633c ([FEATURE] Added visualizations_scripts module)
+numpy>=2.3.3
+scikit-learn>=1.7.2
+matplotlib>=3.10.7
+seaborn>=0.13.2
+pandas>=2.3.0
+imblearn>=0.0
+questionary>=2.1.1
+tensorflow>=2.20.0
+umap-learn>=0.5.5

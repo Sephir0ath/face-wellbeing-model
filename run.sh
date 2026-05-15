@@ -1,9 +1,9 @@
 #!/bin/bash
 
-CSV_FILE="data.csv"
+CSV_FILE="data_2.csv"
 
 if [ ! -f "$CSV_FILE" ]; then
-    echo "question,temporality,feature,label,mode,model,f1_train,f1_test" > "$CSV_FILE"
+    echo "question,temporality,feature,label,mode,model,f1_binary_mean,f1_binary_std,f1_macro_mean,f1_macro_std" > "$CSV_FILE"
 fi
 
 # Listas de valores para iterar

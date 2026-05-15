@@ -345,13 +345,13 @@ def testing_models() -> None:
 
     summary = (
         cv_results.groupby("model")[
-            ["accuracy", "balanced_accuracy", "f1_macro", "f1_binary"]
+            ["f1_macro", "f1_binary"]
         ]
         .agg(["mean", "std"])
         .sort_values(("f1_binary", "mean"), ascending=False)
     )
 
-    print("Cross-validation summary (mean/std):\n")
+    # print("Cross-validation summary (mean/std):\n")
     print(summary)
 
     input("Press [ENTER] to view the confusion matrix... ")
@@ -380,19 +380,44 @@ def testing_models_with_arguments(args: argparse.Namespace) -> None:
         label=label,
     )
 
-    X, _X_id, y = extract_dataframes_and_series(dataframe=dataframe, label_names=label_names)
-    X_train, X_test, y_train, y_test = config_data_with_arguments(X=X, y=y, mode=mode)
+    X, X_id, y = extract_dataframes_and_series(dataframe=dataframe, label_names=label_names)
+    # X_train, X_test, y_train, y_test = config_data_with_arguments(X=X, y=y, mode=mode)
 
-    y_predict, f1_score_train, f1_score_test = execute_model_with_arguments(
-        X_train=X_train,
-        X_test=X_test,
-        y_train=y_train,
-        y_test=y_test,
+
+    mode_step = return_mode(mode) if mode is not None and mode != "SMOTE" else None
+    model_selected = ""
+
+    cv_results = cross_validate_models(
+        X=X,
+        y=y,
+        groups=X_id,
+        mode=mode,
+        mode_step=mode_step,
+        model_selected=model_selected,
     )
 
-    for model_name in f1_score_test:
+    summary = (
+        cv_results.groupby("model")[
+            ["f1_macro", "f1_binary"]
+        ]
+        .agg(["mean", "std"])
+        .sort_values(("f1_binary", "mean"), ascending=False)
+    )
+
+    # print(summary)
+
+    for model_name, row in summary.iterrows():
         print(
-            f"{question},{temporality},all,{label},{mode},{model_name},{f1_score_train[model_name]},{f1_score_test[model_name]}"
+            f"{question},"
+            f"{temporality},"
+            f"{feature if feature else 'all'},"
+            f"{label},"
+            f"{mode},"
+            f"{model_name},"
+            f"{row[('f1_binary', 'mean')]},"
+            f"{row[('f1_binary', 'std')]},"
+            f"{row[('f1_macro', 'mean')]},"
+            f"{row[('f1_macro', 'std')]}"
         )
 
 
