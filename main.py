@@ -11,6 +11,7 @@ from sklearn.decomposition import PCA
 from sklearn.exceptions import ConvergenceWarning
 from sklearn.feature_selection import SelectKBest, f_classif
 from sklearn.metrics import accuracy_score, balanced_accuracy_score, f1_score
+from sklearn.model_selection import RandomizedSearchCV
 from sklearn.model_selection import StratifiedGroupKFold, train_test_split
 
 from src.data_extractor import DataExtractor
@@ -23,7 +24,7 @@ from src.menu import (
     select_question,
     select_temporality,
 )
-from src.models import Models
+from src.models import MODELS, Models
 from src.smote import Smote
 
 
@@ -54,7 +55,7 @@ def return_mode(mode: str) -> tuple[str, object] | None:
         case "selection feature":
             return ("select", SelectKBest(score_func=f_classif, k=10))
         case "PCA":
-            return ("pca", PCA(n_components=20, random_state=42))
+            return ("pca", PCA(n_components=15, random_state=42))
         case "t-SNE":
             # t-SNE is for visualization only
             return None
@@ -238,6 +239,11 @@ def cross_validate_models(
     mode: str | None,
     mode_step: tuple[str, object] | None,
     model_selected: Any,
+    *,
+    arguments: bool = False,
+    tune: bool = False,
+    n_iter: int = 25,
+    inner_splits: int = 3,
 ) -> pd.DataFrame:
     """Stratified group cross-validation by participant ID."""
 
@@ -264,22 +270,58 @@ def cross_validate_models(
             apply = Smote()
             X_train, y_train = apply.apply(X_train=X_train, y_train=y_train)
 
-        model = Models()
-        if not model_selected:
-            preds = model.fit_and_predict_models(
-                X_train=X_train,
-                y_train=y_train,
-                X_test=X_test,
-                mode_step=mode_step,
-            )
+        model = Models(arguments=arguments)
+
+        if not tune:
+            if not model_selected:
+                preds = model.fit_and_predict_models(
+                    X_train=X_train,
+                    y_train=y_train,
+                    X_test=X_test,
+                    mode_step=mode_step,
+                )
+            else:
+                preds = model.fit_and_predict_single_model(
+                    X_train=X_train,
+                    y_train=y_train,
+                    X_test=X_test,
+                    model=model_selected,
+                    mode_step=mode_step,
+                )
         else:
-            preds = model.fit_and_predict_single_model(
-                X_train=X_train,
-                y_train=y_train,
-                X_test=X_test,
-                model=model_selected,
-                mode_step=mode_step,
+            # Nested CV: tune hyperparameters inside each outer fold.
+            train_groups = groups.iloc[train_index]
+            n_inner = min(inner_splits, train_groups.nunique())
+            inner_cv = (
+                StratifiedGroupKFold(n_splits=n_inner, shuffle=True, random_state=42)
+                if n_inner >= 2
+                else None
             )
+
+            model_classes = MODELS if not model_selected else [model_selected]
+            preds = {}
+            for model_class in model_classes:
+                pipe = model.build_pipeline_for(model_class, mode_step=mode_step)
+                space = model.get_param_distributions(model_class.__name__, mode_step=mode_step)
+
+                if inner_cv is None or not space:
+                    # Fallback: train without tuning
+                    pipe.fit(X_train, y_train)
+                    preds[model_class.__name__] = pipe.predict(X_test)
+                    continue
+
+                search = RandomizedSearchCV(
+                    estimator=pipe,
+                    param_distributions=space,
+                    n_iter=n_iter,
+                    scoring="f1",  # binary F1
+                    cv=inner_cv,
+                    n_jobs=-1,
+                    random_state=42,
+                    refit=True,
+                )
+                search.fit(X_train, y_train, groups=train_groups)
+                preds[model_class.__name__] = search.best_estimator_.predict(X_test)
 
         for model_name, y_pred in preds.items():
             rows.append(
@@ -339,6 +381,8 @@ def testing_models() -> None:
         mode=mode,
         mode_step=mode_step,
         model_selected=model_selected,
+        arguments=False,
+        tune=False,
     )
 
     summary = (
@@ -390,6 +434,10 @@ def testing_models_with_arguments(args: argparse.Namespace) -> None:
         mode=mode,
         mode_step=mode_step,
         model_selected=model_selected,
+        arguments=True,
+        tune=bool(getattr(args, "tune", False)),
+        n_iter=int(getattr(args, "n_iter", 25)),
+        inner_splits=int(getattr(args, "inner_splits", 3)),
     )
 
     summary = (
@@ -414,6 +462,23 @@ def main() -> None:
     parser.add_argument("--temporality", type=str, help="True/False")
     parser.add_argument("--model", type=str, help="Model")
     parser.add_argument("--mode", type=str, help="Mode")
+    parser.add_argument(
+        "--tune",
+        action="store_true",
+        help="Enable nested RandomizedSearchCV inside each outer fold",
+    )
+    parser.add_argument(
+        "--n_iter",
+        type=int,
+        default=25,
+        help="RandomizedSearchCV n_iter (only if --tune)",
+    )
+    parser.add_argument(
+        "--inner_splits",
+        type=int,
+        default=3,
+        help="Inner CV splits for tuning (only if --tune)",
+    )
     args = parser.parse_args()
 
     if any(vars(args).values()):

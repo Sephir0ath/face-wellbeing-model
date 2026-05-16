@@ -9,6 +9,8 @@ data/
 # C extensions
 *.so
 
+_venv/
+
 # Distribution / packaging
 .Python
 build/

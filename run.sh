@@ -11,12 +11,13 @@ questions=(1 2 3 4 5)
 features="All features"
 label=("depression" "anxiety")
 temporality="False"
-mode=("selection feature" "PCA" "t-SNE" "SMOTE" "Pass")
+mode=("selection feature" "PCA" "SMOTE" "Pass") # t-SNE no se usa para entrenamiento, solo visualización
+
 
 for q in "${questions[@]}"; do
     for l in "${label[@]}"; do
         for m in "${mode[@]}"; do
-            python main.py --question "$q" --feature "$f" --label "$l" --temporality "$temporality" --mode "$m" >> "$CSV_FILE"
+            python main.py --question "$q" --feature "$features" --label "$l" --temporality "$temporality" --mode "$m" --tune --n_iter 25 --inner_splits 3 >> "$CSV_FILE"
         done
     done
 done

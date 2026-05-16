@@ -39,6 +39,95 @@ class Models:
     def __init__(self, arguments: bool | None = None):
         self.arguments = arguments
 
+    def build_pipeline_for(self, model_class, mode_step=None) -> Pipeline:
+        """Convenience helper to build a full sklearn.Pipeline for a model.
+
+        Intended for nested CV / (Randomized|Grid)SearchCV.
+        """
+        model_name = model_class.__name__
+        tuning = self.parameter_tuning(model_name)
+        model_instance = model_class(**tuning)
+        return self._build_pipeline(model_instance=model_instance, mode_step=mode_step)
+
+    def get_param_distributions(self, model_name: str, mode_step=None) -> dict:
+        """Parameter search space for RandomizedSearchCV/GridSearchCV.
+
+        Returned keys are compatible with the pipeline produced by _build_pipeline:
+        - classifier params: prefixed with 'clf__'
+        - optional mode step params: 'select__' or 'pca__'
+
+        Notes:
+        - Spaces are intentionally small (n is small); expand only if needed.
+        - If a parameter is fixed in parameter_tuning(), you can still override it here.
+        """
+
+        space: dict[str, object] = {}
+
+        # Optional: tune the representation step if present
+        if mode_step is not None:
+            step_name, _ = mode_step
+            if step_name == "select":
+                space["select__k"] = [5, 10, 15, 20, "all"]
+            elif step_name == "pca":
+                # Keep <= num features at runtime; PCA will error if too large.
+                space["pca__n_components"] = [2, 5, 10, 15]
+
+        # Model-specific hyperparameters
+        if model_name == "LogisticRegression":
+            space |= {
+                "clf__C": [0.01, 0.1, 1.0, 10.0, 100.0],
+                "clf__penalty": ["l2"],
+                "clf__solver": ["lbfgs", "liblinear"],
+            }
+        elif model_name == "LinearSVC":
+            space |= {
+                "clf__C": [0.01, 0.1, 1.0, 10.0, 100.0],
+            }
+        elif model_name == "SVC":
+            space |= {
+                "clf__C": [0.1, 1.0, 10.0, 100.0],
+                "clf__gamma": ["scale", "auto"],
+            }
+        elif model_name == "KNeighborsClassifier":
+            space |= {
+                "clf__n_neighbors": [3, 5, 7, 9, 11],
+                "clf__weights": ["uniform", "distance"],
+                "clf__p": [1, 2],
+            }
+        elif model_name == "DecisionTreeClassifier":
+            space |= {
+                "clf__max_depth": [None, 2, 3, 4, 5, 6, 8, 10],
+                "clf__min_samples_split": [2, 5, 10, 20],
+                "clf__min_samples_leaf": [1, 2, 3, 5, 10],
+            }
+        elif model_name == "RandomForestClassifier":
+            space |= {
+                "clf__n_estimators": [200, 500, 1000],
+                "clf__max_depth": [None, 4, 6, 8, 10],
+                "clf__min_samples_leaf": [1, 2, 3, 5],
+                "clf__max_features": ["sqrt", "log2", None],
+            }
+        elif model_name == "GradientBoostingClassifier":
+            space |= {
+                "clf__n_estimators": [50, 100, 150, 300],
+                "clf__learning_rate": [0.01, 0.05, 0.1, 0.2],
+                "clf__max_depth": [1, 2, 3, 4],
+                "clf__subsample": [0.6, 0.8, 1.0],
+            }
+        elif model_name == "HistGradientBoostingClassifier":
+            space |= {
+                "clf__learning_rate": [0.01, 0.05, 0.1, 0.2],
+                "clf__max_depth": [None, 2, 3, 4, 6],
+                "clf__max_iter": [200, 500, 1000],
+                "clf__l2_regularization": [0.0, 0.1, 1.0],
+            }
+        elif model_name == "GaussianNB":
+            space |= {
+                "clf__var_smoothing": [1e-12, 1e-10, 1e-9, 1e-8, 1e-7],
+            }
+
+        return space
+
     def _build_pipeline(self, model_instance, mode_step=None) -> Pipeline:
         """Build a leakage-safe sklearn Pipeline.
 
